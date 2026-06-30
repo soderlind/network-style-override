@@ -4,7 +4,7 @@ Tags: multisite, network, css, theme.json, branding, global styles
 Requires at least: 6.8
 Tested up to: 7.0
 Requires PHP: 8.3
-Stable tag: 0.4.0
+Stable tag: 0.4.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,18 @@ Yes. Click **Preview on site** to open a new tab with your unsaved changes appli
 5. Revision history with one-click restore
 
 == Changelog ==
+
+= 0.4.1 =
+* Fix: Add __next40pxDefaultSize to SelectControl for WP 7.1 compatibility.
+* Fix: Hide global Save/Preview buttons on Theme Overrides tab.
+* Fix: Make CSS enqueue conditional, support multiple hook names.
+* Add: WP-CLI acceptance tests with class loading verification.
+
+= 0.4.0 =
+* Add: Theme-specific overrides - CSS and theme.json overrides that apply only to specific themes.
+* Add: New "Theme Overrides" tab in admin UI with theme selector dropdown.
+* Add: REST API endpoints for network themes and theme overrides.
+* Add: Theme overrides included in export/import functionality.
 
 = 0.3.2 =
 * Fix dependency vulnerabilities (update @wordpress/scripts, add npm overrides).

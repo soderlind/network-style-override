@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-06-30
+
+### Fixed
+
+- Add `__next40pxDefaultSize` to SelectControl for WP 7.1 compatibility.
+- Hide global Save/Preview buttons on Theme Overrides tab.
+- Make CSS enqueue conditional, support multiple hook name variants.
+
+### Added
+
+- WP-CLI acceptance tests with class loading verification.
+
 ## [0.4.0] - 2026-06-30
 
 ### Added
