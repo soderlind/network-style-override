@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-06-30
+
+### Added
+
+- Norwegian Bokmål (nb_NO) translations.
+
+### Changed
+
+- Improved theme.json visual editor UX: clearer labels ("Display Name", "Identifier"), contextual help text, auto-generated identifiers from names.
+
 ## [0.4.2] - 2026-06-30
 
 ### Changed

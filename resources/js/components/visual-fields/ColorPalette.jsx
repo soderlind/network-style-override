@@ -1,4 +1,4 @@
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import {
 	Button,
 	TextControl,
@@ -6,20 +6,50 @@ import {
 	Popover,
 	Panel,
 	PanelBody,
+	BaseControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
-function ColorRow( { color, onChange, onRemove } ) {
+/**
+ * Convert a name to a valid slug (kebab-case).
+ */
+function toSlug( name ) {
+	return name
+		.toLowerCase()
+		.replace( /[^a-z0-9]+/g, '-' )
+		.replace( /^-|-$/g, '' );
+}
+
+function ColorRow( { color, onChange, onRemove, index } ) {
 	const [ pickerOpen, setPickerOpen ] = useState( false );
+	const [ slugEdited, setSlugEdited ] = useState( !! color.slug );
+
+	// Auto-generate slug from name if user hasn't manually edited it
+	const handleNameChange = ( name ) => {
+		const updates = { ...color, name };
+		if ( ! slugEdited ) {
+			updates.slug = toSlug( name );
+		}
+		onChange( updates );
+	};
+
+	const handleSlugChange = ( slug ) => {
+		setSlugEdited( true );
+		onChange( { ...color, slug: toSlug( slug ) } );
+	};
 
 	return (
 		<div className="mos-color-row">
-			<button
-				className="mos-color-swatch"
-				style={ { backgroundColor: color.color } }
-				onClick={ () => setPickerOpen( ( v ) => ! v ) }
-				aria-label={ __( 'Pick color', 'multisite-override-style' ) }
-			/>
+			<div className="mos-color-row__swatch">
+				<button
+					className="mos-color-swatch"
+					style={ { backgroundColor: color.color } }
+					onClick={ () => setPickerOpen( ( v ) => ! v ) }
+					aria-label={ __( 'Pick color', 'multisite-override-style' ) }
+					title={ color.color }
+				/>
+				<code className="mos-color-hex">{ color.color }</code>
+			</div>
 
 			{ pickerOpen && (
 				<Popover onClose={ () => setPickerOpen( false ) }>
@@ -33,23 +63,30 @@ function ColorRow( { color, onChange, onRemove } ) {
 				</Popover>
 			) }
 
-			<TextControl
-				label={ __( 'Name', 'multisite-override-style' ) }
-				hideLabelFromVision
-				placeholder={ __( 'Name', 'multisite-override-style' ) }
-				value={ color.name }
-				onChange={ ( name ) => onChange( { ...color, name } ) }
-			/>
+			<div className="mos-color-row__fields">
+				<TextControl
+					label={ __( 'Display Name', 'multisite-override-style' ) }
+					help={ __( 'Shown in the editor color picker', 'multisite-override-style' ) }
+					placeholder={ __( 'e.g. Primary Blue', 'multisite-override-style' ) }
+					value={ color.name }
+					onChange={ handleNameChange }
+				/>
 
-			<TextControl
-				label={ __( 'Slug', 'multisite-override-style' ) }
-				hideLabelFromVision
-				placeholder={ __( 'slug', 'multisite-override-style' ) }
-				value={ color.slug }
-				onChange={ ( slug ) => onChange( { ...color, slug } ) }
-			/>
+				<TextControl
+					label={ __( 'Identifier', 'multisite-override-style' ) }
+					help={ __( 'Used in CSS variables: --wp--preset--color--{identifier}', 'multisite-override-style' ) }
+					placeholder={ __( 'e.g. primary-blue', 'multisite-override-style' ) }
+					value={ color.slug }
+					onChange={ handleSlugChange }
+				/>
+			</div>
 
-			<Button isDestructive variant="tertiary" onClick={ onRemove }>
+			<Button
+				isDestructive
+				variant="tertiary"
+				onClick={ onRemove }
+				className="mos-color-row__remove"
+			>
 				{ __( 'Remove', 'multisite-override-style' ) }
 			</Button>
 		</div>
@@ -77,10 +114,14 @@ export default function ColorPaletteField( { colors, onChange } ) {
 				title={ __( 'Color Palette', 'multisite-override-style' ) }
 				initialOpen={ true }
 			>
+				<p className="description">
+					{ __( 'Define colors available in the block editor. Each color needs a display name and an identifier.', 'multisite-override-style' ) }
+				</p>
 				<div className="mos-color-palette">
 					{ colors.map( ( color, index ) => (
 						<ColorRow
 							key={ index }
+							index={ index }
 							color={ color }
 							onChange={ ( updated ) =>
 								updateColor( index, updated )
