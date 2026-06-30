@@ -3,7 +3,7 @@
  * Plugin Name:       Multisite Override Style
  * Plugin URI:        https://github.com/soderlind/multisite-override-style
  * Description:       Network-wide CSS and theme.json overrides for WordPress Multisite. Enforces brand consistency across all subsites.
- * Version:           0.3.2
+ * Version:           0.4.0
  * Author:            Per Søderlind
  * Author URI:        https://soderlind.no
  * Requires at least: 6.8

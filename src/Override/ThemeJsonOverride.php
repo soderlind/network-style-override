@@ -36,20 +36,30 @@ final class ThemeJsonOverride {
 			return $theme_json;
 		}
 
-		$override = $this->preview->is_active()
+		// Apply global override first.
+		$global_override = $this->preview->is_active()
 			? $this->preview->get_draft_theme_json()
 			: $this->settings->get_theme_json();
 
-		if ( empty( $override ) ) {
-			return $theme_json;
+		if ( ! empty( $global_override ) ) {
+			if ( ! isset( $global_override['version'] ) ) {
+				$global_override['version'] = 3;
+			}
+			$theme_json->update_with( $global_override );
 		}
 
-		// Ensure the required version key is present.
-		if ( ! isset( $override['version'] ) ) {
-			$override['version'] = 3;
-		}
+		// Apply theme-specific override on top (not in preview mode).
+		if ( ! $this->preview->is_active() ) {
+			$theme_slug      = get_stylesheet();
+			$theme_override  = $this->settings->get_theme_json_for_theme( $theme_slug );
 
-		$theme_json->update_with( $override );
+			if ( ! empty( $theme_override ) ) {
+				if ( ! isset( $theme_override['version'] ) ) {
+					$theme_override['version'] = 3;
+				}
+				$theme_json->update_with( $theme_override );
+			}
+		}
 
 		return $theme_json;
 	}

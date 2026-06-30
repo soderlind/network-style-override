@@ -28,9 +28,19 @@ final class CssOverride {
 			return;
 		}
 
+		// Get global CSS.
 		$css = $this->preview->is_active()
 			? $this->preview->get_draft_css()
 			: $this->settings->get_css();
+
+		// Append theme-specific CSS (not in preview mode).
+		if ( ! $this->preview->is_active() ) {
+			$theme_slug = get_stylesheet();
+			$theme_css  = $this->settings->get_theme_css( $theme_slug );
+			if ( $theme_css !== '' ) {
+				$css .= "\n/* Theme-specific: {$theme_slug} */\n" . $theme_css;
+			}
+		}
 
 		if ( $css === '' ) {
 			return;

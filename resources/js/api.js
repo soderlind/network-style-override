@@ -52,3 +52,26 @@ export const importSettings = ( bundle ) =>
 		method: 'POST',
 		data: bundle,
 	} );
+
+// Theme-specific overrides
+export const getNetworkThemes = () =>
+	apiFetch( { path: '/mos/v1/network-themes' } );
+
+export const getThemeOverrides = () =>
+	apiFetch( { path: '/mos/v1/theme-overrides' } );
+
+export const getThemeOverride = ( slug ) =>
+	apiFetch( { path: `/mos/v1/theme-overrides/${ slug }` } );
+
+export const saveThemeOverride = ( slug, { css, theme_json } ) =>
+	apiFetch( {
+		path: `/mos/v1/theme-overrides/${ slug }`,
+		method: 'POST',
+		data: { slug, css, theme_json },
+	} );
+
+export const deleteThemeOverride = ( slug ) =>
+	apiFetch( {
+		path: `/mos/v1/theme-overrides/${ slug }`,
+		method: 'DELETE',
+	} );

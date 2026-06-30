@@ -127,9 +127,52 @@ final class RestController {
 			'callback'            => [ $this, 'import_settings' ],
 			'permission_callback' => $auth,
 			'args'                => [
-				'css'        => [ 'type' => 'string', 'default' => '' ],
-				'theme_json' => [ 'type' => 'object', 'default' => [] ],
-				'exemptions' => [ 'type' => 'array', 'items' => [ 'type' => 'integer' ], 'default' => [] ],
+				'css'             => [ 'type' => 'string', 'default' => '' ],
+				'theme_json'      => [ 'type' => 'object', 'default' => [] ],
+				'exemptions'      => [ 'type' => 'array', 'items' => [ 'type' => 'integer' ], 'default' => [] ],
+				'theme_overrides' => [ 'type' => 'object', 'default' => [] ],
+			],
+		] );
+
+		// Theme-specific overrides.
+		register_rest_route( self::NAMESPACE, '/network-themes', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'get_network_themes' ],
+			'permission_callback' => $auth,
+		] );
+
+		register_rest_route( self::NAMESPACE, '/theme-overrides', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'get_theme_overrides' ],
+			'permission_callback' => $auth,
+		] );
+
+		register_rest_route( self::NAMESPACE, '/theme-overrides/(?P<slug>[a-z0-9_-]+)', [
+			[
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'get_theme_override' ],
+				'permission_callback' => $auth,
+				'args'                => [
+					'slug' => [ 'type' => 'string', 'required' => true, 'sanitize_callback' => 'sanitize_key' ],
+				],
+			],
+			[
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'save_theme_override' ],
+				'permission_callback' => $auth,
+				'args'                => [
+					'slug'       => [ 'type' => 'string', 'required' => true, 'sanitize_callback' => 'sanitize_key' ],
+					'css'        => [ 'type' => 'string', 'default' => '' ],
+					'theme_json' => [ 'type' => 'object', 'default' => [] ],
+				],
+			],
+			[
+				'methods'             => WP_REST_Server::DELETABLE,
+				'callback'            => [ $this, 'delete_theme_override' ],
+				'permission_callback' => $auth,
+				'args'                => [
+					'slug' => [ 'type' => 'string', 'required' => true, 'sanitize_callback' => 'sanitize_key' ],
+				],
 			],
 		] );
 	}
@@ -230,11 +273,12 @@ final class RestController {
 
 	public function export_settings(): WP_REST_Response {
 		$bundle = [
-			'version'    => MOS_VERSION,
-			'exported'   => gmdate( 'c' ),
-			'css'        => $this->settings->get_css(),
-			'theme_json' => $this->settings->get_theme_json(),
-			'exemptions' => $this->settings->get_exemptions(),
+			'version'         => MOS_VERSION,
+			'exported'        => gmdate( 'c' ),
+			'css'             => $this->settings->get_css(),
+			'theme_json'      => $this->settings->get_theme_json(),
+			'exemptions'      => $this->settings->get_exemptions(),
+			'theme_overrides' => $this->settings->get_theme_overrides(),
 		];
 
 		return new WP_REST_Response( $bundle );
@@ -248,6 +292,91 @@ final class RestController {
 		$this->settings->save_theme_json( (array) $request->get_param( 'theme_json' ) );
 		$this->settings->save_exemptions( (array) $request->get_param( 'exemptions' ) );
 
+		// Import theme overrides if provided.
+		$theme_overrides = (array) $request->get_param( 'theme_overrides' );
+		foreach ( $theme_overrides as $slug => $override ) {
+			if ( is_array( $override ) ) {
+				$css        = $override['css'] ?? '';
+				$theme_json = $override['theme_json'] ?? [];
+				$this->settings->save_theme_override( (string) $slug, (string) $css, (array) $theme_json );
+			}
+		}
+
 		return $this->get_settings();
+	}
+
+	/**
+	 * Get themes that are active on at least one subsite.
+	 */
+	public function get_network_themes(): WP_REST_Response {
+		global $wpdb;
+
+		// Get all unique stylesheet values from wp_X_options across the network.
+		$blog_ids = get_sites( [
+			'fields' => 'ids',
+			'number' => 0,
+		] );
+
+		$themes = [];
+		foreach ( $blog_ids as $blog_id ) {
+			switch_to_blog( $blog_id );
+			$stylesheet = get_option( 'stylesheet' );
+			if ( $stylesheet && ! isset( $themes[ $stylesheet ] ) ) {
+				$theme = wp_get_theme( $stylesheet );
+				if ( $theme->exists() ) {
+					$themes[ $stylesheet ] = [
+						'slug'          => $stylesheet,
+						'name'          => $theme->get( 'Name' ),
+						'is_block_theme' => $theme->is_block_theme(),
+					];
+				}
+			}
+			restore_current_blog();
+		}
+
+		return new WP_REST_Response( array_values( $themes ) );
+	}
+
+	/**
+	 * Get all theme-specific overrides.
+	 */
+	public function get_theme_overrides(): WP_REST_Response {
+		return new WP_REST_Response( $this->settings->get_theme_overrides() );
+	}
+
+	/**
+	 * Get override for a specific theme.
+	 */
+	public function get_theme_override( WP_REST_Request $request ): WP_REST_Response {
+		$slug = (string) $request->get_param( 'slug' );
+
+		return new WP_REST_Response( [
+			'slug'       => $slug,
+			'css'        => $this->settings->get_theme_css( $slug ),
+			'theme_json' => $this->settings->get_theme_json_for_theme( $slug ),
+		] );
+	}
+
+	/**
+	 * Save override for a specific theme.
+	 */
+	public function save_theme_override( WP_REST_Request $request ): WP_REST_Response {
+		$slug       = (string) $request->get_param( 'slug' );
+		$css        = (string) $request->get_param( 'css' );
+		$theme_json = (array) $request->get_param( 'theme_json' );
+
+		$this->settings->save_theme_override( $slug, $css, $theme_json );
+
+		return $this->get_theme_override( $request );
+	}
+
+	/**
+	 * Delete override for a specific theme.
+	 */
+	public function delete_theme_override( WP_REST_Request $request ): WP_REST_Response {
+		$slug = (string) $request->get_param( 'slug' );
+		$this->settings->delete_theme_override( $slug );
+
+		return new WP_REST_Response( [ 'deleted' => $slug ] );
 	}
 }

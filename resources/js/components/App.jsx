@@ -3,6 +3,7 @@ import { Spinner, Notice, TabPanel, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import CssEditor from './CssEditor';
 import ThemeJsonEditor from './ThemeJsonEditor';
+import ThemeOverrides from './ThemeOverrides';
 import ExemptionList from './ExemptionList';
 import RevisionHistory from './RevisionHistory';
 import ImportExport from './ImportExport';
@@ -104,6 +105,10 @@ export default function App() {
 			name: 'theme-json',
 			title: __( 'theme.json', 'multisite-override-style' ),
 		},
+		{
+			name: 'theme-overrides',
+			title: __( 'Theme Overrides', 'multisite-override-style' ),
+		},
 		{ name: 'sites', title: __( 'Sites', 'multisite-override-style' ) },
 		{ name: 'history', title: __( 'History', 'multisite-override-style' ) },
 		{
@@ -152,6 +157,9 @@ export default function App() {
 									setSettings( { ...settings, theme_json } )
 								}
 							/>
+						) }
+						{ tab.name === 'theme-overrides' && (
+							<ThemeOverrides />
 						) }
 						{ tab.name === 'sites' && (
 							<ExemptionList exemptions={ settings.exemptions } />
