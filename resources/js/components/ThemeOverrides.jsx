@@ -181,6 +181,7 @@ export default function ThemeOverrides() {
 				options={ themeOptions }
 				onChange={ handleThemeChange }
 				__nextHasNoMarginBottom
+				__next40pxDefaultSize
 			/>
 
 			{ selectedTheme && (
