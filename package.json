@@ -23,6 +23,16 @@
 		"@wordpress/notices": "*"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^30.0"
+		"@wordpress/scripts": "^32.5.0"
+	},
+	"overrides": {
+		"@babel/core": "^7.29.6",
+		"@opentelemetry/core": "^2.8.0",
+		"linkify-it": "^5.0.1",
+		"uuid": "^11.1.1",
+		"minimatch": "^3.1.4",
+		"serialize-javascript": "^7.0.6",
+		"webpack-dev-server": "^5.2.5",
+		"markdown-it": "^14.2.0"
 	}
 }
