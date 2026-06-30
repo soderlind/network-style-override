@@ -8,7 +8,7 @@ use MultisiteOverrideStyle\Service\EffectiveOverrideResolver;
 
 /**
  * Enqueues the network CSS override as an inline <style> block on the front-end,
- * appended after all other stylesheets.
+ * appended after all other stylesheets at the end of <head>.
  */
 final class CssOverride {
 
@@ -17,19 +17,20 @@ final class CssOverride {
 	) {}
 
 	public function register(): void {
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue' ], 9999 );
+		// Use wp_head with high priority to print after all enqueued styles.
+		add_action( 'wp_head', [ $this, 'print_styles' ], 9999 );
 	}
 
-	public function enqueue(): void {
+	public function print_styles(): void {
 		$css = $this->resolver->getCss();
 
 		if ( $css === '' ) {
 			return;
 		}
 
-		// Register a dummy stylesheet with no src so we can attach inline CSS to it.
-		wp_register_style( 'mos-override', false, [], MOS_VERSION );
-		wp_enqueue_style( 'mos-override' );
-		wp_add_inline_style( 'mos-override', $css );
+		printf(
+			"<style id=\"mos-override\">\n%s\n</style>\n",
+			$css // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS is admin-controlled.
+		);
 	}
 }
