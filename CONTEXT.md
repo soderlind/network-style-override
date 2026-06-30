@@ -56,3 +56,29 @@ A single JSON file containing the current CSS Override text, `theme.json` overri
 - The Draft Override is never persisted to `wp_sitemeta`; it exists only in a transient.
 - Revisions are append-only. Restoring a Revision creates a new Revision; it does not delete existing ones.
 - The `theme.json` Override is not applied to Classic Theme subsites under any circumstance.
+
+## Architecture
+
+### Service Layer
+
+**EffectiveOverrideResolver**
+Resolves the effective CSS and theme.json for the current request context. Combines exemption checking, preview detection, and theme-specific override logic in a single deep module. Interface: `isExempted()`, `resolveForCurrentSite()`, `getCss()`, `getThemeJson()`, `activeThemeSupportsThemeJson()`.
+
+**OverrideBundleService**
+Owns the canonical interface for network overrides as a unified bundle (CSS + theme overrides + exemptions). Handles load, save, export, import, and preview operations. Interface: `load()`, `loadGlobal()`, `saveGlobal()`, `saveThemeOverride()`, `deleteThemeOverride()`, `export()`, `import()`, `createPreview()`, `discardPreview()`.
+
+**ThemeCatalogService**
+Theme discovery and metadata. Interface: `getNetworkThemes()`, `getOriginalThemeJson()`, `themeExists()`, `isBlockTheme()`.
+
+### Override Modules
+
+**CssOverride**
+Enqueues network CSS via wp_head. Delegates all resolution logic to EffectiveOverrideResolver.
+
+**ThemeJsonOverride**
+Merges network theme.json into WP user layer via wp_theme_json_data_user filter. Delegates exemption and resolution to EffectiveOverrideResolver.
+
+### React Hooks
+
+**useThemeOverrideDraft**
+Deep module for theme override draft state management. Tracks auto-populated vs user-edited changes to prevent false dirty state. Interface: `overrides`, `dirtyThemes`, `hasDirtyChanges`, `getOverride()`, `isDirty()`, `isAutoPopulated()`, `updateOverride()`, `populateFromDefaults()`, `resetToOriginal()`, `resetToDefaults()`, `saveAll()`, `deleteOverride()`, `syncFromExternal()`.

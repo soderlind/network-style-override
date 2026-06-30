@@ -17,7 +17,8 @@ import { getOriginalThemeJson } from '../api';
  * @param {Object}   props
  * @param {Array}    props.themes           - List of network themes.
  * @param {Object}   props.overrides        - All theme overrides keyed by slug.
- * @param {Function} props.onOverrideChange - Called with (slug, override) when override changes.
+ * @param {Function} props.onOverrideChange - Called with (slug, override, isUserEdit) when override changes.
+ * @param {Function} props.onAutoPopulate   - Called with (slug, themeJson) to auto-populate from defaults.
  * @param {Function} props.onDelete         - Called with (slug) to delete an override.
  * @param {boolean}  props.loading          - Whether data is still loading.
  * @param {boolean}  props.deleting         - Whether a delete is in progress.
@@ -26,6 +27,7 @@ export default function ThemeOverrides( {
 	themes,
 	overrides,
 	onOverrideChange,
+	onAutoPopulate,
 	onDelete,
 	loading,
 	deleting,
@@ -53,7 +55,8 @@ export default function ThemeOverrides( {
 				[ slug ]: data.theme_json,
 			} ) );
 
-			// If no override exists for this theme, populate with original theme.json.
+			// If no override exists for this theme, auto-populate from defaults.
+			// Use onAutoPopulate which doesn't mark as dirty.
 			const existingOverride = overrides[ slug ];
 			const hasExistingOverride =
 				existingOverride &&
@@ -61,11 +64,8 @@ export default function ThemeOverrides( {
 					Object.keys( existingOverride.theme_json || {} ).length >
 						0 );
 
-			if ( ! hasExistingOverride && data.is_block_theme ) {
-				onOverrideChange( slug, {
-					css: '',
-					theme_json: data.theme_json,
-				} );
+			if ( ! hasExistingOverride && data.is_block_theme && onAutoPopulate ) {
+				onAutoPopulate( slug, data.theme_json );
 			}
 		} catch ( e ) {
 			// Silently fail — theme.json might not exist for classic themes.
@@ -76,7 +76,7 @@ export default function ThemeOverrides( {
 		} finally {
 			setLoadingOriginal( false );
 		}
-	}, [ overrides, onOverrideChange ] );
+	}, [ overrides, onAutoPopulate ] );
 
 	// Fetch original theme.json when selected theme changes.
 	useEffect( () => {
@@ -95,14 +95,14 @@ export default function ThemeOverrides( {
 	};
 
 	const handleCssChange = ( css ) => {
-		onOverrideChange( selectedTheme, { ...currentOverride, css } );
+		onOverrideChange( selectedTheme, { ...currentOverride, css }, true );
 	};
 
 	const handleThemeJsonChange = ( themeJson ) => {
 		onOverrideChange( selectedTheme, {
 			...currentOverride,
 			theme_json: themeJson,
-		} );
+		}, true );
 	};
 
 	const handleResetToDefaults = () => {
@@ -118,7 +118,7 @@ export default function ThemeOverrides( {
 		onOverrideChange( selectedTheme, {
 			...currentOverride,
 			theme_json: original,
-		} );
+		}, true );
 	};
 
 	const handleDelete = () => {
