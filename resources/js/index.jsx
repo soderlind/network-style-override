@@ -1,7 +1,7 @@
 import { createRoot } from '@wordpress/element';
 import App from './components/App';
 
-const root = document.getElementById( 'mos-admin-app' );
+const root = document.getElementById( 'nso-admin-app' );
 if ( root ) {
 	createRoot( root ).render( <App /> );
 }
