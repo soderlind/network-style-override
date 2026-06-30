@@ -13,6 +13,9 @@ Network-wide CSS and `theme.json` overrides for WordPress Multisite. Enforce bra
 - **Import / Export** — JSON bundle for dev → staging → production promotion
 - **Block Theme Aware** — `theme.json` applies to block themes only; classic themes get CSS only
 
+<img width="100%"  alt="Screenshot 2026-06-30 at 20 01 25" src="https://github.com/user-attachments/assets/ca69a5f8-222c-4a45-9b20-6504086e797d" />
+
+
 ## Requirements
 
 - WordPress Multisite 6.8+
