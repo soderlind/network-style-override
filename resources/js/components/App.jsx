@@ -6,6 +6,7 @@ import ThemeOverrides from './ThemeOverrides';
 import ExemptionList from './ExemptionList';
 import RevisionHistory from './RevisionHistory';
 import ImportExport from './ImportExport';
+import { useThemeOverrideDraft } from '../hooks/useThemeOverrideDraft';
 import {
 	getSettings,
 	saveSettings,
@@ -25,14 +26,20 @@ export default function App() {
 	const [ previewToken, setPreviewToken ] = useState( null );
 	const [ activeTab, setActiveTab ] = useState( 'css' );
 
-	// Theme overrides state (lifted from ThemeOverrides component).
+	// Theme state.
 	const [ themes, setThemes ] = useState( [] );
-	const [ themeOverrides, setThemeOverrides ] = useState( {} );
-	const [ dirtyThemeOverrides, setDirtyThemeOverrides ] = useState(
-		new Set()
-	);
 	const [ themesLoading, setThemesLoading ] = useState( true );
 	const [ deleting, setDeleting ] = useState( false );
+
+	// Use deep module for theme override draft state.
+	const themeOverrideDraft = useThemeOverrideDraft( {
+		initialOverrides: {},
+		onSaveThemeOverride: saveThemeOverride,
+		onDeleteThemeOverride: deleteThemeOverride,
+	} );
+
+	// Extract stable callback to avoid infinite loop in useEffect.
+	const { syncFromExternal } = themeOverrideDraft;
 
 	const load = useCallback( async () => {
 		try {
@@ -54,7 +61,7 @@ export default function App() {
 				getThemeOverrides(),
 			] );
 			setThemes( themesData );
-			setThemeOverrides( overridesData );
+			syncFromExternal( overridesData );
 		} catch ( e ) {
 			setError(
 				e.message ??
@@ -66,7 +73,7 @@ export default function App() {
 		} finally {
 			setThemesLoading( false );
 		}
-	}, [] );
+	}, [ syncFromExternal ] );
 
 	useEffect( () => {
 		load();
@@ -81,12 +88,8 @@ export default function App() {
 			const updated = await saveSettings( settings );
 			setSettings( updated );
 
-			// Save any dirty theme overrides.
-			const savePromises = [ ...dirtyThemeOverrides ].map( ( slug ) =>
-				saveThemeOverride( slug, themeOverrides[ slug ] )
-			);
-			await Promise.all( savePromises );
-			setDirtyThemeOverrides( new Set() );
+			// Save any dirty theme overrides via the draft module.
+			await themeOverrideDraft.saveAll();
 
 			setSaved( true );
 			setTimeout( () => setSaved( false ), 3000 );
@@ -99,27 +102,14 @@ export default function App() {
 		}
 	};
 
-	const handleThemeOverrideChange = ( slug, override ) => {
-		setThemeOverrides( {
-			...themeOverrides,
-			[ slug ]: override,
-		} );
-		setDirtyThemeOverrides( new Set( [ ...dirtyThemeOverrides, slug ] ) );
+	const handleThemeOverrideChange = ( slug, override, isUserEdit = true ) => {
+		themeOverrideDraft.updateOverride( slug, override, isUserEdit );
 	};
 
 	const handleThemeOverrideDelete = async ( slug ) => {
 		setDeleting( true );
 		try {
-			await deleteThemeOverride( slug );
-			const newOverrides = { ...themeOverrides };
-			delete newOverrides[ slug ];
-			setThemeOverrides( newOverrides );
-
-			// Remove from dirty set if present.
-			const newDirty = new Set( dirtyThemeOverrides );
-			newDirty.delete( slug );
-			setDirtyThemeOverrides( newDirty );
-
+			await themeOverrideDraft.deleteOverride( slug );
 			setSaved( true );
 			setTimeout( () => setSaved( false ), 3000 );
 		} catch ( e ) {
@@ -156,8 +146,15 @@ export default function App() {
 		setTimeout( () => setSaved( false ), 3000 );
 	};
 
-	const handleImported = ( updated ) => {
+	const handleImported = async ( updated ) => {
 		setSettings( updated );
+		// Reload theme overrides after import.
+		try {
+			const overridesData = await getThemeOverrides();
+			themeOverrideDraft.syncFromExternal( overridesData );
+		} catch ( e ) {
+			// Silently ignore — main settings were imported.
+		}
 		setSaved( true );
 		setTimeout( () => setSaved( false ), 3000 );
 	};
@@ -230,8 +227,9 @@ export default function App() {
 						{ tab.name === 'theme-overrides' && (
 							<ThemeOverrides
 								themes={ themes }
-								overrides={ themeOverrides }
+								overrides={ themeOverrideDraft.overrides }
 								onOverrideChange={ handleThemeOverrideChange }
+								onAutoPopulate={ themeOverrideDraft.populateFromDefaults }
 								onDelete={ handleThemeOverrideDelete }
 								loading={ themesLoading }
 								deleting={ deleting }

@@ -4,8 +4,9 @@ declare( strict_types=1 );
 
 namespace MultisiteOverrideStyle\Admin;
 
-use MultisiteOverrideStyle\Override\ExemptionChecker;
 use MultisiteOverrideStyle\Preview\PreviewHandler;
+use MultisiteOverrideStyle\Service\OverrideBundleService;
+use MultisiteOverrideStyle\Service\ThemeCatalogService;
 use MultisiteOverrideStyle\Storage\RevisionRepository;
 use MultisiteOverrideStyle\Storage\SettingsRepository;
 use WP_REST_Request;
@@ -13,7 +14,7 @@ use WP_REST_Response;
 use WP_REST_Server;
 
 /**
- * Registers the mos/v1 REST API namespace consumed by the React admin UI.
+ * Thin REST adapter over deep service modules.
  *
  * All endpoints require the manage_network capability.
  *
@@ -37,7 +38,8 @@ final class RestController {
 	public function __construct(
 		private readonly SettingsRepository $settings,
 		private readonly RevisionRepository $revisions,
-		private readonly ExemptionChecker $exemption,
+		private readonly OverrideBundleService $bundle,
+		private readonly ThemeCatalogService $theme_catalog,
 		private readonly PreviewHandler $preview,
 	) {}
 
@@ -192,21 +194,17 @@ final class RestController {
 	}
 
 	public function get_settings(): WP_REST_Response {
-		return new WP_REST_Response( [
-			'css'        => $this->settings->get_css(),
-			'theme_json' => $this->settings->get_theme_json(),
-			'exemptions' => $this->settings->get_exemptions(),
-		] );
+		return new WP_REST_Response( $this->bundle->loadGlobal() );
 	}
 
 	public function save_settings( WP_REST_Request $request ): WP_REST_Response {
-		// Snapshot the current state before overwriting.
-		$this->revisions->snapshot( get_current_user_id() );
+		$updated = $this->bundle->saveGlobal(
+			(string) $request->get_param( 'css' ),
+			(array) $request->get_param( 'theme_json' ),
+			get_current_user_id()
+		);
 
-		$this->settings->save_css( (string) $request->get_param( 'css' ) );
-		$this->settings->save_theme_json( (array) $request->get_param( 'theme_json' ) );
-
-		return $this->get_settings();
+		return new WP_REST_Response( $updated );
 	}
 
 	public function get_revisions(): WP_REST_Response {
@@ -221,7 +219,7 @@ final class RestController {
 			return new WP_REST_Response( [ 'message' => __( 'Revision not found.', 'multisite-override-style' ) ], 404 );
 		}
 
-		return $this->get_settings();
+		return new WP_REST_Response( $this->bundle->loadGlobal() );
 	}
 
 	public function get_sites(): WP_REST_Response {
@@ -263,88 +261,39 @@ final class RestController {
 		$theme_json = (array) $request->get_param( 'theme_json' );
 		$site_url   = (string) $request->get_param( 'site_url' );
 
-		$token = $this->preview->create_draft( $css, $theme_json );
+		$result = $this->bundle->createPreview( $css, $theme_json, $site_url );
 
-		$base_url = $site_url !== '' ? $site_url : network_home_url( '/' );
-		$preview_url = add_query_arg( 'mos_preview', $token, $base_url );
-
-		return new WP_REST_Response( [
-			'token'       => $token,
-			'preview_url' => $preview_url,
-		] );
+		return new WP_REST_Response( $result );
 	}
 
 	public function discard_preview( WP_REST_Request $request ): WP_REST_Response {
 		$token = (string) $request->get_param( 'token' );
-		$this->preview->discard_draft( $token );
+		$this->bundle->discardPreview( $token );
 
 		return new WP_REST_Response( [ 'discarded' => true ] );
 	}
 
 	public function export_settings(): WP_REST_Response {
-		$bundle = [
-			'version'         => MOS_VERSION,
-			'exported'        => gmdate( 'c' ),
-			'css'             => $this->settings->get_css(),
-			'theme_json'      => $this->settings->get_theme_json(),
-			'exemptions'      => $this->settings->get_exemptions(),
-			'theme_overrides' => $this->settings->get_theme_overrides(),
-		];
-
-		return new WP_REST_Response( $bundle );
+		return new WP_REST_Response( $this->bundle->export() );
 	}
 
 	public function import_settings( WP_REST_Request $request ): WP_REST_Response {
-		// Snapshot current state before overwriting.
-		$this->revisions->snapshot( get_current_user_id() );
+		$updated = $this->bundle->import(
+			(string) $request->get_param( 'css' ),
+			(array) $request->get_param( 'theme_json' ),
+			(array) $request->get_param( 'exemptions' ),
+			$request->get_param( 'theme_overrides' ),
+			get_current_user_id()
+		);
 
-		$this->settings->save_css( (string) $request->get_param( 'css' ) );
-		$this->settings->save_theme_json( (array) $request->get_param( 'theme_json' ) );
-		$this->settings->save_exemptions( (array) $request->get_param( 'exemptions' ) );
-
-		// Import theme overrides if provided.
-		$theme_overrides = (array) $request->get_param( 'theme_overrides' );
-		foreach ( $theme_overrides as $slug => $override ) {
-			if ( is_array( $override ) ) {
-				$css        = $override['css'] ?? '';
-				$theme_json = $override['theme_json'] ?? [];
-				$this->settings->save_theme_override( (string) $slug, (string) $css, (array) $theme_json );
-			}
-		}
-
-		return $this->get_settings();
+		return new WP_REST_Response( $updated );
 	}
 
 	/**
 	 * Get themes that are active on at least one subsite.
 	 */
 	public function get_network_themes(): WP_REST_Response {
-		global $wpdb;
-
-		// Get all unique stylesheet values from wp_X_options across the network.
-		$blog_ids = get_sites( [
-			'fields' => 'ids',
-			'number' => 0,
-		] );
-
-		$themes = [];
-		foreach ( $blog_ids as $blog_id ) {
-			switch_to_blog( $blog_id );
-			$stylesheet = get_option( 'stylesheet' );
-			if ( $stylesheet && ! isset( $themes[ $stylesheet ] ) ) {
-				$theme = wp_get_theme( $stylesheet );
-				if ( $theme->exists() ) {
-					$themes[ $stylesheet ] = [
-						'slug'          => $stylesheet,
-						'name'          => $theme->get( 'Name' ),
-						'is_block_theme' => $theme->is_block_theme(),
-					];
-				}
-			}
-			restore_current_blog();
-		}
-
-		return new WP_REST_Response( array_values( $themes ) );
+		return new WP_REST_Response( $this->theme_catalog->getNetworkThemes() );
 	}
 
 	/**
@@ -375,7 +324,7 @@ final class RestController {
 		$css        = (string) $request->get_param( 'css' );
 		$theme_json = (array) $request->get_param( 'theme_json' );
 
-		$this->settings->save_theme_override( $slug, $css, $theme_json );
+		$this->bundle->saveThemeOverride( $slug, $css, $theme_json );
 
 		return $this->get_theme_override( $request );
 	}
@@ -385,7 +334,7 @@ final class RestController {
 	 */
 	public function delete_theme_override( WP_REST_Request $request ): WP_REST_Response {
 		$slug = (string) $request->get_param( 'slug' );
-		$this->settings->delete_theme_override( $slug );
+		$this->bundle->deleteThemeOverride( $slug );
 
 		return new WP_REST_Response( [ 'deleted' => $slug ] );
 	}
@@ -394,42 +343,23 @@ final class RestController {
 	 * Get the original theme.json from a theme (not the override).
 	 */
 	public function get_original_theme_json( WP_REST_Request $request ): WP_REST_Response {
-		$slug = (string) $request->get_param( 'slug' );
-		$theme = wp_get_theme( $slug );
+		$slug   = (string) $request->get_param( 'slug' );
+		$result = $this->theme_catalog->getOriginalThemeJson( $slug );
 
-		if ( ! $theme->exists() ) {
-			return new WP_REST_Response(
-				[ 'message' => __( 'Theme not found.', 'multisite-override-style' ) ],
-				404
-			);
-		}
-
-		if ( ! $theme->is_block_theme() ) {
-			return new WP_REST_Response( [
-				'slug'       => $slug,
-				'theme_json' => [],
-				'is_block_theme' => false,
-			] );
-		}
-
-		// Read the theme.json file directly.
-		$theme_json_path = $theme->get_stylesheet_directory() . '/theme.json';
-		$theme_json = [];
-
-		if ( file_exists( $theme_json_path ) ) {
-			$contents = file_get_contents( $theme_json_path );
-			if ( $contents !== false ) {
-				$decoded = json_decode( $contents, true );
-				if ( json_last_error() === JSON_ERROR_NONE && is_array( $decoded ) ) {
-					$theme_json = $decoded;
-				}
+		if ( empty( $result['theme_json'] ) && ! $result['is_block_theme'] ) {
+			// Theme might not exist or is not a block theme.
+			if ( ! $this->theme_catalog->themeExists( $slug ) ) {
+				return new WP_REST_Response(
+					[ 'message' => __( 'Theme not found.', 'multisite-override-style' ) ],
+					404
+				);
 			}
 		}
 
 		return new WP_REST_Response( [
 			'slug'           => $slug,
-			'theme_json'     => $theme_json,
-			'is_block_theme' => true,
+			'theme_json'     => $result['theme_json'],
+			'is_block_theme' => $result['is_block_theme'],
 		] );
 	}
 }
