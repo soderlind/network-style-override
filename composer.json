@@ -30,6 +30,7 @@
 	},
 	"scripts": {
 		"test": "phpunit --testdox",
-		"test:coverage": "phpunit --coverage-text"
+		"test:coverage": "phpunit --coverage-text",
+		"test:acceptance": "bash tests/Acceptance/run-acceptance-tests.sh"
 	}
 }
