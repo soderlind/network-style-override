@@ -389,3 +389,19 @@ msgstr "Importer innstillinger fra en tidligere eksportert JSON-fil. Gjeldende i
 #: resources/js/components/ImportExport.jsx:94
 msgid "Select JSON file to import"
 msgstr "Velg JSON-fil for importering"
+
+#: resources/js/components/ThemeOverrides.jsx
+msgid "Loading theme.json…"
+msgstr "Laster theme.json…"
+
+#: resources/js/components/ThemeOverrides.jsx
+msgid "Reset to theme defaults? This will replace your current theme.json override with the original from the theme."
+msgstr "Tilbakestill til temastandard? Dette erstatter din gjeldende theme.json-overstyring med originalen fra temaet."
+
+#: resources/js/components/ThemeOverrides.jsx
+msgid "Reset to theme defaults"
+msgstr "Tilbakestill til temastandard"
+
+#: src/Admin/RestController.php
+msgid "Theme not found."
+msgstr "Tema ikke funnet."

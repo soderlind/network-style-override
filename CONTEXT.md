@@ -3,13 +3,16 @@
 ## Glossary
 
 **Network Override**
-The authoritative set of CSS rules and `theme.json` values defined by a network admin that apply across all subsites in the multisite installation. The Network Override is the source of truth; subsite settings cannot supersede it except via an explicit Exemption.
+The authoritative set of CSS rules defined by a network admin that apply across all subsites in the multisite installation. The Network Override is the source of truth; subsite settings cannot supersede it except via an explicit Exemption.
 
 **CSS Override**
 The CSS portion of the Network Override. Delivered as an inline `<style>` block, enqueued after all other stylesheets on the front-end. Applies to all subsites regardless of theme type.
 
+**Theme Override**
+A per-theme combination of CSS and `theme.json` values. Each theme can have its own override that is applied after the global CSS override. Allows theme-specific customizations while maintaining network-wide brand consistency.
+
 **theme.json Override**
-The structured `theme.json` portion of the Network Override. Deep-merged into the `user` layer via `wp_theme_json_data_user`, so network values win over the active theme's `theme.json` and WordPress defaults. Applies to block-theme subsites only.
+The structured `theme.json` portion of a Theme Override. Deep-merged into the `user` layer via `wp_theme_json_data_user`, so network values win over the active theme's `theme.json` and WordPress defaults. Applies to block-theme subsites only. Theme presets (colors, fonts, spacing) from the active theme are loaded as read-only; only values can be modified.
 
 **Block Theme**
 A WordPress theme that ships a `theme.json` file and uses the block editor as its primary layout mechanism. The `theme.json` Override applies only to block themes. If a block theme has no `theme.json`, the plugin synthesises one entirely from the network override values.
@@ -33,7 +36,7 @@ The structured form controls in the Network Admin UI for editing common `theme.j
 The CodeMirror-powered JSON editor tab in the Network Admin UI. Accepts any valid `theme.json` fragment. Takes precedence over Visual Fields on save — the two are merged, with Raw JSON winning on key conflicts.
 
 **Network Admin UI**
-The React (`@wordpress/components`) single-page interface mounted in the WordPress Network Admin. Contains: CSS editor (CodeMirror), `theme.json` editor (Visual Fields + Raw JSON tab), Exemption list, Revision history, Import/Export controls, and Preview button.
+The React (`@wordpress/components`) single-page interface mounted in the WordPress Network Admin. Contains: CSS editor (CodeMirror), Theme Overrides (per-theme CSS and `theme.json` with Visual Fields + Raw JSON), Exemption list, Revision history, Import/Export controls, and Preview button.
 
 **Exemption List**
 The full-network view within the Network Admin UI showing all subsites with a toggle per site. Writes to the same underlying `wp_sitemeta` key as the Edit Site checkbox.

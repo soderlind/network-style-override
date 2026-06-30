@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import VisualTab from './VisualTab';
 import RawJsonTab from './RawJsonTab';
 
-export default function ThemeJsonEditor( { value, onChange } ) {
+export default function ThemeJsonEditor( { value, onChange, originalValue } ) {
 	const tabs = [
 		{ name: 'visual', title: __( 'Visual', 'multisite-override-style' ) },
 		{ name: 'raw', title: __( 'Raw JSON', 'multisite-override-style' ) },
@@ -22,7 +22,7 @@ export default function ThemeJsonEditor( { value, onChange } ) {
 				{ ( tab ) => (
 					<>
 						{ tab.name === 'visual' && (
-							<VisualTab value={ value } onChange={ onChange } />
+							<VisualTab value={ value } onChange={ onChange } originalValue={ originalValue } />
 						) }
 						{ tab.name === 'raw' && (
 							<RawJsonTab value={ value } onChange={ onChange } />

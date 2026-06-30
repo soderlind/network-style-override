@@ -75,3 +75,7 @@ export const deleteThemeOverride = ( slug ) =>
 		path: `/mos/v1/theme-overrides/${ slug }`,
 		method: 'DELETE',
 	} );
+
+// Fetch original theme.json from a theme (not override)
+export const getOriginalThemeJson = ( slug ) =>
+	apiFetch( { path: `/mos/v1/theme-json/${ slug }` } );

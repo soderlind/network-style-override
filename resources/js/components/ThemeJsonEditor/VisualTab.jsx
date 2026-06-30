@@ -22,10 +22,33 @@ function setPath( obj, keys, value ) {
 	};
 }
 
-export default function VisualTab( { value, onChange } ) {
+export default function VisualTab( { value, onChange, originalValue } ) {
 	const update = ( keys, fieldValue ) => {
 		onChange( setPath( value ?? {}, keys, fieldValue ) );
 	};
+
+	// Extract original slugs for each preset type to lock them.
+	const originalColorSlugs = new Set(
+		( getPath( originalValue, 'settings', 'color', 'palette' ) ?? [] ).map(
+			( c ) => c.slug
+		)
+	);
+	const originalFontFamilySlugs = new Set(
+		(
+			getPath( originalValue, 'settings', 'typography', 'fontFamilies' ) ??
+			[]
+		).map( ( f ) => f.slug )
+	);
+	const originalFontSizeSlugs = new Set(
+		(
+			getPath( originalValue, 'settings', 'typography', 'fontSizes' ) ?? []
+		).map( ( s ) => s.slug )
+	);
+	const originalSpacingSlugs = new Set(
+		(
+			getPath( originalValue, 'settings', 'spacing', 'spacingSizes' ) ?? []
+		).map( ( s ) => s.slug )
+	);
 
 	return (
 		<div className="mos-visual-tab">
@@ -36,6 +59,7 @@ export default function VisualTab( { value, onChange } ) {
 				onChange={ ( colors ) =>
 					update( [ 'settings', 'color', 'palette' ], colors )
 				}
+				lockedSlugs={ originalColorSlugs }
 			/>
 
 			<Typography
@@ -57,6 +81,8 @@ export default function VisualTab( { value, onChange } ) {
 						...typography,
 					} )
 				}
+				lockedFamilySlugs={ originalFontFamilySlugs }
+				lockedSizeSlugs={ originalFontSizeSlugs }
 			/>
 
 			<Spacing
@@ -67,6 +93,7 @@ export default function VisualTab( { value, onChange } ) {
 				onChange={ ( sizes ) =>
 					update( [ 'settings', 'spacing', 'spacingSizes' ], sizes )
 				}
+				lockedSlugs={ originalSpacingSlugs }
 			/>
 
 			<BorderControls

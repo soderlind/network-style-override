@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from '@wordpress/element';
 import { Spinner, Notice, TabPanel, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import CssEditor from './CssEditor';
-import ThemeJsonEditor from './ThemeJsonEditor';
 import ThemeOverrides from './ThemeOverrides';
 import ExemptionList from './ExemptionList';
 import RevisionHistory from './RevisionHistory';
@@ -180,10 +179,6 @@ export default function App() {
 	const tabs = [
 		{ name: 'css', title: __( 'CSS', 'multisite-override-style' ) },
 		{
-			name: 'theme-json',
-			title: __( 'theme.json', 'multisite-override-style' ),
-		},
-		{
 			name: 'theme-overrides',
 			title: __( 'Theme Overrides', 'multisite-override-style' ),
 		},
@@ -197,7 +192,6 @@ export default function App() {
 
 	const showFooter =
 		activeTab === 'css' ||
-		activeTab === 'theme-json' ||
 		activeTab === 'theme-overrides';
 
 	return (
@@ -230,17 +224,6 @@ export default function App() {
 								value={ settings.css }
 								onChange={ ( css ) =>
 									setSettings( { ...settings, css } )
-								}
-							/>
-						) }
-						{ tab.name === 'theme-json' && (
-							<ThemeJsonEditor
-								value={ settings.theme_json }
-								onChange={ ( themeJson ) =>
-									setSettings( {
-										...settings,
-										theme_json: themeJson,
-									} )
 								}
 							/>
 						) }
@@ -278,7 +261,7 @@ export default function App() {
 						{ __( 'Save', 'multisite-override-style' ) }
 					</Button>
 
-					{ ( activeTab === 'css' || activeTab === 'theme-json' ) && (
+					{ activeTab === 'css' && (
 						<Button
 							variant="secondary"
 							onClick={ handlePreview }

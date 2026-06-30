@@ -1,0 +1,370 @@
+- generic [ref=f2e2]:
+  - navigation "Main menu":
+    - link "Skip to main content" [ref=f2e3] [cursor=pointer]:
+      - /url: "#wpbody-content"
+    - link "Skip to toolbar" [ref=f2e4] [cursor=pointer]:
+      - /url: "#wp-toolbar"
+    - list [ref=f2e7]:
+      - listitem [ref=f2e8]:
+        - link "Dashboard" [ref=f2e9] [cursor=pointer]:
+          - /url: index.php
+          - generic [ref=f2e10]: 
+          - generic [ref=f2e11]: Dashboard
+        - list [ref=f2e12]:
+          - listitem [ref=f2e13]:
+            - link "Home" [ref=f2e14] [cursor=pointer]:
+              - /url: index.php
+          - listitem [ref=f2e15]:
+            - link "Updates 2" [ref=f2e16] [cursor=pointer]:
+              - /url: update-core.php
+              - text: Updates
+              - generic [ref=f2e17]: "2"
+          - listitem [ref=f2e18]:
+            - link "Upgrade Network" [ref=f2e19] [cursor=pointer]:
+              - /url: upgrade.php
+      - listitem [ref=f2e20]
+      - listitem [ref=f2e22]:
+        - link "Sites" [ref=f2e23] [cursor=pointer]:
+          - /url: sites.php
+          - generic [ref=f2e24]: 
+          - generic [ref=f2e25]: Sites
+        - list [ref=f2e26]:
+          - listitem [ref=f2e27]:
+            - link "All Sites" [ref=f2e28] [cursor=pointer]:
+              - /url: sites.php
+          - listitem [ref=f2e29]:
+            - link "Add Site" [ref=f2e30] [cursor=pointer]:
+              - /url: site-new.php
+      - listitem [ref=f2e31]:
+        - link "Users" [ref=f2e32] [cursor=pointer]:
+          - /url: users.php
+          - generic [ref=f2e33]: 
+          - generic [ref=f2e34]: Users
+        - list [ref=f2e35]:
+          - listitem [ref=f2e36]:
+            - link "All Users" [ref=f2e37] [cursor=pointer]:
+              - /url: users.php
+          - listitem [ref=f2e38]:
+            - link "Add User" [ref=f2e39] [cursor=pointer]:
+              - /url: user-new.php
+      - listitem [ref=f2e40]:
+        - link "Themes" [ref=f2e41] [cursor=pointer]:
+          - /url: themes.php
+          - generic [ref=f2e42]: 
+          - generic [ref=f2e43]: Themes
+        - list [ref=f2e44]:
+          - listitem [ref=f2e45]:
+            - link "Installed Themes" [ref=f2e46] [cursor=pointer]:
+              - /url: themes.php
+          - listitem [ref=f2e47]:
+            - link "Add Theme" [ref=f2e48] [cursor=pointer]:
+              - /url: theme-install.php
+          - listitem [ref=f2e49]:
+            - link "Theme File Editor" [ref=f2e50] [cursor=pointer]:
+              - /url: theme-editor.php
+          - listitem [ref=f2e51]:
+            - link "Override Style" [ref=f2e52] [cursor=pointer]:
+              - /url: themes.php?page=multisite-override-style
+      - listitem [ref=f2e53]:
+        - link "Plugins 2" [ref=f2e54] [cursor=pointer]:
+          - /url: plugins.php
+          - generic [ref=f2e55]: 
+          - generic [ref=f2e56]:
+            - text: Plugins
+            - generic [ref=f2e57]: "2"
+        - list [ref=f2e58]:
+          - listitem [ref=f2e59]:
+            - link "Installed Plugins" [ref=f2e60] [cursor=pointer]:
+              - /url: plugins.php
+          - listitem [ref=f2e61]:
+            - link "Add Plugin" [ref=f2e62] [cursor=pointer]:
+              - /url: plugin-install.php
+          - listitem [ref=f2e63]:
+            - link "Plugin File Editor" [ref=f2e64] [cursor=pointer]:
+              - /url: plugin-editor.php
+      - listitem [ref=f2e65]:
+        - link "Settings" [ref=f2e66] [cursor=pointer]:
+          - /url: settings.php
+          - generic [ref=f2e67]: 
+          - generic [ref=f2e68]: Settings
+        - list [ref=f2e69]:
+          - listitem [ref=f2e70]:
+            - link "Network Settings" [ref=f2e71] [cursor=pointer]:
+              - /url: settings.php
+          - listitem [ref=f2e72]:
+            - link "Network Setup" [ref=f2e73] [cursor=pointer]:
+              - /url: setup.php
+          - listitem [ref=f2e74]:
+            - link "JSON-LD" [ref=f2e75] [cursor=pointer]:
+              - /url: settings.php?page=soderlind-jsonld-network
+          - listitem [ref=f2e76]:
+            - link "PS AgentReady" [ref=f2e77] [cursor=pointer]:
+              - /url: settings.php?page=ps-agentready
+          - listitem [ref=f2e78]:
+            - link "Beta Testing" [ref=f2e79] [cursor=pointer]:
+              - /url: settings.php?page=wp-beta-tester
+          - listitem [ref=f2e80]:
+            - link "Multisite Enhancements" [ref=f2e81] [cursor=pointer]:
+              - /url: settings.php?page=wpme_config
+      - listitem [ref=f2e82]:
+        - link "MS Exporter" [ref=f2e83] [cursor=pointer]:
+          - /url: admin.php?page=multisite-exporter
+          - generic [ref=f2e84]: 
+          - generic [ref=f2e85]: MS Exporter
+        - list [ref=f2e86]:
+          - listitem [ref=f2e87]:
+            - link "MS Exporter" [ref=f2e88] [cursor=pointer]:
+              - /url: admin.php?page=multisite-exporter
+          - listitem [ref=f2e89]:
+            - link "Exports" [ref=f2e90] [cursor=pointer]:
+              - /url: admin.php?page=multisite-exporter-history
+          - listitem [ref=f2e91]:
+            - link "Scheduled Actions" [ref=f2e92] [cursor=pointer]:
+              - /url: admin.php?page=me-scheduled-actions
+      - listitem [ref=f2e93]:
+        - button "Collapse Main menu" [expanded] [ref=f2e94] [cursor=pointer]:
+          - generic [ref=f2e96]: Collapse Menu
+  - generic [ref=f2e97]:
+    - generic [ref=f2e98]:
+      - navigation "Toolbar":
+        - menu:
+          - group [ref=f2e99]:
+            - menuitem "All Sites" [ref=f2e100] [cursor=pointer]
+          - group [ref=f2e101]:
+            - 'menuitem "Network Admin: plugins Sites" [ref=f2e102] [cursor=pointer]'
+          - group [ref=f2e103]:
+            - menuitem "2 updates available" [ref=f2e104] [cursor=pointer]:
+              - generic [ref=f2e106]: "2"
+              - generic [ref=f2e107]: 2 updates available
+          - group [ref=f2e108]:
+            - menuitem "⌘K Open command palette" [ref=f2e109] [cursor=pointer]:
+              - generic [ref=f2e111]:
+                - text: ⌘K
+                - generic [ref=f2e112]: Open command palette
+          - group [ref=f2e113]:
+            - link "0.11s 14.3MB 0.01s 51Q" [ref=f2e114] [cursor=pointer]:
+              - /url: "#qm-overview"
+              - generic [ref=f2e115]: 0.11s 14.3MB 0.01s 51Q
+        - menu [ref=f2e116]:
+          - group [ref=f2e117]:
+            - menuitem "Howdy, per" [ref=f2e118] [cursor=pointer]
+    - main [ref=f2e119]:
+      - generic [ref=f2e123]:
+        - heading "Network Style Override" [level=1] [ref=f2e132]
+        - generic [ref=f2e133]:
+          - tablist [ref=f2e134]:
+            - tab "CSS" [ref=f2e135] [cursor=pointer]
+            - tab "theme.json" [ref=f2e136] [cursor=pointer]
+            - tab "Theme Overrides" [selected] [ref=f2e137] [cursor=pointer]
+            - tab "Sites" [ref=f2e138] [cursor=pointer]
+            - tab "History" [ref=f2e139] [cursor=pointer]
+            - tab "Import / Export" [ref=f2e140] [cursor=pointer]
+          - tabpanel "Theme Overrides" [ref=f2e158]:
+            - generic [ref=f2e159]:
+              - paragraph [ref=f2e160]: Add CSS or theme.json overrides that apply only to specific themes. These are applied after the global overrides.
+              - generic [ref=f2e163] [cursor=pointer]:
+                - generic [ref=f2e165]: Select Theme
+                - generic [ref=f2e166]:
+                  - combobox "Select Theme" [ref=f2e167]:
+                    - option "Twenty Twenty-Five (twentytwentyfive)" [selected]
+                    - option "Twenty Twenty-Four (twentytwentyfour)"
+                    - option "EØS-støtte (dss-wp-eos) — Classic"
+                    - option "Nettsteder Mal Utvalg (nettsteder-mal-utvalg) — Classic"
+                    - option "Twenty Twenty-Three (twentytwentythree)"
+                    - option "DIO - Block Theme (nettsteder-dio-theme)"
+                    - option "Planutdanning (planutdanning) — Classic"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+              - generic [ref=f2e168]:
+                - tablist [ref=f2e169]:
+                  - tab "CSS" [ref=f2e170] [cursor=pointer]
+                  - tab "theme.json" [selected] [ref=f2e171] [cursor=pointer]
+                - tabpanel "theme.json" [ref=f2e189]:
+                  - generic [ref=f2e190]:
+                    - paragraph [ref=f2e191]: Values are deep-merged into the user (Global Styles) layer — network values take precedence. Applies to block themes only.
+                    - generic [ref=f2e192]:
+                      - tablist [ref=f2e193]:
+                        - tab "Visual" [selected] [ref=f2e194] [cursor=pointer]
+                        - tab "Raw JSON" [ref=f2e195] [cursor=pointer]
+                      - tabpanel "Visual" [ref=f2e196]:
+                        - generic [ref=f2e197]:
+                          - generic [ref=f2e199]:
+                            - heading "Color Palette" [level=2] [ref=f2e200]:
+                              - button "Color Palette" [expanded] [ref=f2e201] [cursor=pointer]:
+                                - img [ref=f2e202]
+                                - text: Color Palette
+                            - paragraph [ref=f2e204]: Override colors available in the block editor.
+                            - generic [ref=f2e205]:
+                              - generic [ref=f2e206]: Name
+                              - generic [ref=f2e207]: Identifier
+                            - generic [ref=f2e208]:
+                              - generic [ref=f2e212]:
+                                - button [ref=f2e215] [cursor=pointer]
+                                - generic [ref=f2e217]:
+                                  - textbox "Primary" [disabled] [ref=f2e220]: Base
+                                  - textbox "primary" [disabled] [ref=f2e223]: base
+                                - button "Remove" [ref=f2e225] [cursor=pointer]:
+                                  - generic [ref=f2e226]: 
+                              - generic [ref=f2e230]:
+                                - button [ref=f2e233] [cursor=pointer]
+                                - generic [ref=f2e235]:
+                                  - textbox "Primary" [disabled] [ref=f2e238]: Contrast
+                                  - textbox "primary" [disabled] [ref=f2e241]: contrast
+                                - button "Remove" [ref=f2e243] [cursor=pointer]:
+                                  - generic [ref=f2e244]: 
+                              - generic [ref=f2e248]:
+                                - button [ref=f2e251] [cursor=pointer]
+                                - generic [ref=f2e253]:
+                                  - textbox "Primary" [disabled] [ref=f2e256]: Accent 1
+                                  - textbox "primary" [disabled] [ref=f2e259]: accent-1
+                                - button "Remove" [ref=f2e261] [cursor=pointer]:
+                                  - generic [ref=f2e262]: 
+                              - generic [ref=f2e266]:
+                                - button [ref=f2e269] [cursor=pointer]
+                                - generic [ref=f2e271]:
+                                  - textbox "Primary" [disabled] [ref=f2e274]: Accent 2
+                                  - textbox "primary" [disabled] [ref=f2e277]: accent-2
+                                - button "Remove" [ref=f2e279] [cursor=pointer]:
+                                  - generic [ref=f2e280]: 
+                              - generic [ref=f2e284]:
+                                - button [ref=f2e287] [cursor=pointer]
+                                - generic [ref=f2e289]:
+                                  - textbox "Primary" [disabled] [ref=f2e292]: Accent 3
+                                  - textbox "primary" [disabled] [ref=f2e295]: accent-3
+                                - button "Remove" [ref=f2e297] [cursor=pointer]:
+                                  - generic [ref=f2e298]: 
+                              - generic [ref=f2e302]:
+                                - button [ref=f2e305] [cursor=pointer]
+                                - generic [ref=f2e307]:
+                                  - textbox "Primary" [disabled] [ref=f2e310]: Accent 4
+                                  - textbox "primary" [disabled] [ref=f2e313]: accent-4
+                                - button "Remove" [ref=f2e315] [cursor=pointer]:
+                                  - generic [ref=f2e316]: 
+                              - generic [ref=f2e320]:
+                                - button [ref=f2e323] [cursor=pointer]
+                                - generic [ref=f2e325]:
+                                  - textbox "Primary" [disabled] [ref=f2e328]: Accent 5
+                                  - textbox "primary" [disabled] [ref=f2e331]: accent-5
+                                - button "Remove" [ref=f2e333] [cursor=pointer]:
+                                  - generic [ref=f2e334]: 
+                              - generic [ref=f2e338]:
+                                - button [ref=f2e341] [cursor=pointer]
+                                - generic [ref=f2e343]:
+                                  - textbox "Primary" [disabled] [ref=f2e346]: Accent 6
+                                  - textbox "primary" [disabled] [ref=f2e349]: accent-6
+                                - button "Remove" [ref=f2e351] [cursor=pointer]:
+                                  - generic [ref=f2e352]: 
+                            - button "+ Add color" [ref=f2e354] [cursor=pointer]
+                          - heading "Font Families" [level=2] [ref=f2e357]:
+                            - button "Font Families" [ref=f2e358] [cursor=pointer]:
+                              - img [ref=f2e359]
+                              - text: Font Families
+                          - generic [ref=f2e362]:
+                            - heading "Font Sizes" [level=2] [ref=f2e363]:
+                              - button "Font Sizes" [expanded] [active] [ref=f2e364] [cursor=pointer]:
+                                - img [ref=f2e365]
+                                - text: Font Sizes
+                            - paragraph [ref=f2e379]: Override font size presets for the block editor.
+                            - generic [ref=f2e380]:
+                              - generic [ref=f2e381]: Name
+                              - generic [ref=f2e382]: Identifier
+                              - generic [ref=f2e383]: Size
+                            - generic [ref=f2e384]:
+                              - generic [ref=f2e388]:
+                                - generic [ref=f2e390]: Aa
+                                - generic [ref=f2e392]:
+                                  - textbox "Large" [disabled] [ref=f2e395]: Small
+                                  - textbox "large" [disabled] [ref=f2e398]: small
+                                  - generic [ref=f2e402]:
+                                    - spinbutton [ref=f2e403]: "0.875"
+                                    - combobox "Select unit" [ref=f2e405] [cursor=pointer]:
+                                      - option "px"
+                                      - option "em"
+                                      - option "rem" [selected]
+                                      - option "%"
+                                      - option "vw"
+                                      - option "vh"
+                                - button "Remove" [ref=f2e407] [cursor=pointer]:
+                                  - generic [ref=f2e408]: 
+                              - generic [ref=f2e412]:
+                                - generic [ref=f2e414]: Aa
+                                - generic [ref=f2e416]:
+                                  - textbox "Large" [disabled] [ref=f2e419]: Medium
+                                  - textbox "large" [disabled] [ref=f2e422]: medium
+                                  - generic [ref=f2e426]:
+                                    - spinbutton [ref=f2e427]: "1"
+                                    - combobox "Select unit" [ref=f2e429] [cursor=pointer]:
+                                      - option "px"
+                                      - option "em"
+                                      - option "rem" [selected]
+                                      - option "%"
+                                      - option "vw"
+                                      - option "vh"
+                                - button "Remove" [ref=f2e431] [cursor=pointer]:
+                                  - generic [ref=f2e432]: 
+                              - generic [ref=f2e436]:
+                                - generic [ref=f2e438]: Aa
+                                - generic [ref=f2e440]:
+                                  - textbox "Large" [disabled] [ref=f2e443]
+                                  - textbox "large" [disabled] [ref=f2e446]
+                                  - generic [ref=f2e450]:
+                                    - spinbutton [ref=f2e451]: "1.38"
+                                    - combobox "Select unit" [ref=f2e453] [cursor=pointer]:
+                                      - option "px"
+                                      - option "em"
+                                      - option "rem" [selected]
+                                      - option "%"
+                                      - option "vw"
+                                      - option "vh"
+                                - button "Remove" [ref=f2e455] [cursor=pointer]:
+                                  - generic [ref=f2e456]: 
+                              - generic [ref=f2e460]:
+                                - generic [ref=f2e462]: Aa
+                                - generic [ref=f2e464]:
+                                  - textbox "Large" [disabled] [ref=f2e467]: Extra Large
+                                  - textbox "large" [disabled] [ref=f2e470]: x-large
+                                  - generic [ref=f2e474]:
+                                    - spinbutton [ref=f2e475]: "1.75"
+                                    - combobox "Select unit" [ref=f2e477] [cursor=pointer]:
+                                      - option "px"
+                                      - option "em"
+                                      - option "rem" [selected]
+                                      - option "%"
+                                      - option "vw"
+                                      - option "vh"
+                                - button "Remove" [ref=f2e479] [cursor=pointer]:
+                                  - generic [ref=f2e480]: 
+                              - generic [ref=f2e484]:
+                                - generic [ref=f2e486]: Aa
+                                - generic [ref=f2e488]:
+                                  - textbox "Large" [disabled] [ref=f2e491]: Extra Extra Large
+                                  - textbox "large" [disabled] [ref=f2e494]: xx-large
+                                  - generic [ref=f2e498]:
+                                    - spinbutton [ref=f2e499]: "2.15"
+                                    - combobox "Select unit" [ref=f2e501] [cursor=pointer]:
+                                      - option "px"
+                                      - option "em"
+                                      - option "rem" [selected]
+                                      - option "%"
+                                      - option "vw"
+                                      - option "vh"
+                                - button "Remove" [ref=f2e503] [cursor=pointer]:
+                                  - generic [ref=f2e504]: 
+                            - button "+ Add font size" [ref=f2e506] [cursor=pointer]
+                          - heading "Spacing Scale" [level=2] [ref=f2e369]:
+                            - button "Spacing Scale" [ref=f2e370] [cursor=pointer]:
+                              - img [ref=f2e371]
+                              - text: Spacing Scale
+                          - heading "Border Defaults" [level=2] [ref=f2e375]:
+                            - button "Border Defaults" [ref=f2e376] [cursor=pointer]:
+                              - img [ref=f2e377]
+                              - text: Border Defaults
+              - generic [ref=f2e186]:
+                - button "Reset to theme defaults" [ref=f2e187] [cursor=pointer]
+                - button "Delete Override" [ref=f2e188] [cursor=pointer]
+        - button "Save" [ref=f2e156] [cursor=pointer]
+  - contentinfo [ref=f2e126]:
+    - paragraph [ref=f2e127]: plugins Sites • RAM 16.0/64M • SQL 120 • PHPv 8.3.30
+    - paragraph [ref=f2e128]: Version 7.0

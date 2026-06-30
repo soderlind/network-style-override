@@ -175,6 +175,16 @@ final class RestController {
 				],
 			],
 		] );
+
+		// Fetch original theme.json from a theme (not the override).
+		register_rest_route( self::NAMESPACE, '/theme-json/(?P<slug>[a-z0-9_-]+)', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'get_original_theme_json' ],
+			'permission_callback' => $auth,
+			'args'                => [
+				'slug' => [ 'type' => 'string', 'required' => true, 'sanitize_callback' => 'sanitize_key' ],
+			],
+		] );
 	}
 
 	public function check_permission(): bool {
@@ -378,5 +388,48 @@ final class RestController {
 		$this->settings->delete_theme_override( $slug );
 
 		return new WP_REST_Response( [ 'deleted' => $slug ] );
+	}
+
+	/**
+	 * Get the original theme.json from a theme (not the override).
+	 */
+	public function get_original_theme_json( WP_REST_Request $request ): WP_REST_Response {
+		$slug = (string) $request->get_param( 'slug' );
+		$theme = wp_get_theme( $slug );
+
+		if ( ! $theme->exists() ) {
+			return new WP_REST_Response(
+				[ 'message' => __( 'Theme not found.', 'multisite-override-style' ) ],
+				404
+			);
+		}
+
+		if ( ! $theme->is_block_theme() ) {
+			return new WP_REST_Response( [
+				'slug'       => $slug,
+				'theme_json' => [],
+				'is_block_theme' => false,
+			] );
+		}
+
+		// Read the theme.json file directly.
+		$theme_json_path = $theme->get_stylesheet_directory() . '/theme.json';
+		$theme_json = [];
+
+		if ( file_exists( $theme_json_path ) ) {
+			$contents = file_get_contents( $theme_json_path );
+			if ( $contents !== false ) {
+				$decoded = json_decode( $contents, true );
+				if ( json_last_error() === JSON_ERROR_NONE && is_array( $decoded ) ) {
+					$theme_json = $decoded;
+				}
+			}
+		}
+
+		return new WP_REST_Response( [
+			'slug'           => $slug,
+			'theme_json'     => $theme_json,
+			'is_block_theme' => true,
+		] );
 	}
 }

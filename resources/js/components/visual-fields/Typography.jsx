@@ -1,5 +1,18 @@
 import { useState } from '@wordpress/element';
-import { Button, TextControl, Panel, PanelBody } from '@wordpress/components';
+import {
+	Button,
+	TextControl,
+	Panel,
+	PanelBody,
+	Flex,
+	FlexItem,
+	FlexBlock,
+	__experimentalHStack as HStack,
+	__experimentalVStack as VStack,
+	__experimentalUnitControl as UnitControl,
+	Card,
+	CardBody,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -12,7 +25,16 @@ function toSlug( name ) {
 		.replace( /^-|-$/g, '' );
 }
 
-export default function Typography( { fontFamilies, fontSizes, onChange } ) {
+const CSS_UNITS = [
+	{ value: 'px', label: 'px' },
+	{ value: 'em', label: 'em' },
+	{ value: 'rem', label: 'rem' },
+	{ value: '%', label: '%' },
+	{ value: 'vw', label: 'vw' },
+	{ value: 'vh', label: 'vh' },
+];
+
+export default function Typography( { fontFamilies, fontSizes, onChange, lockedFamilySlugs = new Set(), lockedSizeSlugs = new Set() } ) {
 	const [ familySlugsEdited, setFamilySlugsEdited ] = useState( {} );
 	const [ sizeSlugsEdited, setSizeSlugsEdited ] = useState( {} );
 
@@ -30,6 +52,8 @@ export default function Typography( { fontFamilies, fontSizes, onChange } ) {
 
 	const updateFamilyName = ( index, name ) => {
 		const next = [ ...fontFamilies ];
+		const isLocked = lockedFamilySlugs.has( next[ index ].slug );
+		if ( isLocked ) return;
 		next[ index ] = { ...next[ index ], name };
 		if ( ! familySlugsEdited[ index ] ) {
 			next[ index ].slug = toSlug( name );
@@ -38,6 +62,8 @@ export default function Typography( { fontFamilies, fontSizes, onChange } ) {
 	};
 
 	const updateFamilySlug = ( index, slug ) => {
+		const isLocked = lockedFamilySlugs.has( fontFamilies[ index ].slug );
+		if ( isLocked ) return;
 		setFamilySlugsEdited( { ...familySlugsEdited, [ index ]: true } );
 		const next = [ ...fontFamilies ];
 		next[ index ] = { ...next[ index ], slug: toSlug( slug ) };
@@ -54,10 +80,12 @@ export default function Typography( { fontFamilies, fontSizes, onChange } ) {
 		updateFontFamilies( fontFamilies.filter( ( _, i ) => i !== index ) );
 
 	const addFontSize = () =>
-		updateFontSizes( [ ...fontSizes, { name: '', slug: '', size: '' } ] );
+		updateFontSizes( [ ...fontSizes, { name: '', slug: '', size: '16px' } ] );
 
 	const updateSizeName = ( index, name ) => {
 		const next = [ ...fontSizes ];
+		const isLocked = lockedSizeSlugs.has( next[ index ].slug );
+		if ( isLocked ) return;
 		next[ index ] = { ...next[ index ], name };
 		if ( ! sizeSlugsEdited[ index ] ) {
 			next[ index ].slug = toSlug( name );
@@ -66,6 +94,8 @@ export default function Typography( { fontFamilies, fontSizes, onChange } ) {
 	};
 
 	const updateSizeSlug = ( index, slug ) => {
+		const isLocked = lockedSizeSlugs.has( fontSizes[ index ].slug );
+		if ( isLocked ) return;
 		setSizeSlugsEdited( { ...sizeSlugsEdited, [ index ]: true } );
 		const next = [ ...fontSizes ];
 		next[ index ] = { ...next[ index ], slug: toSlug( slug ) };
@@ -86,51 +116,73 @@ export default function Typography( { fontFamilies, fontSizes, onChange } ) {
 			<Panel>
 				<PanelBody
 					title={ __( 'Font Families', 'multisite-override-style' ) }
-					initialOpen={ true }
+					initialOpen={ false }
 				>
 					<p className="description">
-						{ __( 'Define font stacks available in the block editor.', 'multisite-override-style' ) }
+						{ __( 'Override font stacks available in the block editor.', 'multisite-override-style' ) }
 					</p>
-					{ fontFamilies.map( ( family, i ) => (
-						<div key={ i } className="mos-font-family-row">
-							<TextControl
-								label={ __( 'Display Name', 'multisite-override-style' ) }
-								help={ __( 'Shown in the font picker dropdown', 'multisite-override-style' ) }
-								placeholder={ __( 'e.g. Heading Font', 'multisite-override-style' ) }
-								value={ family.name }
-								onChange={ ( v ) => updateFamilyName( i, v ) }
-							/>
-							<TextControl
-								label={ __( 'Identifier', 'multisite-override-style' ) }
-								help={ __( 'Used in CSS: --wp--preset--font-family--{identifier}', 'multisite-override-style' ) }
-								placeholder={ __( 'e.g. heading-font', 'multisite-override-style' ) }
-								value={ family.slug }
-								onChange={ ( v ) => updateFamilySlug( i, v ) }
-							/>
-							<TextControl
-								label={ __( 'CSS Font Stack', 'multisite-override-style' ) }
-								help={ __( 'The actual CSS font-family value', 'multisite-override-style' ) }
-								value={ family.fontFamily }
-								onChange={ ( v ) =>
-									updateFamily( i, 'fontFamily', v )
-								}
-								placeholder="e.g. Georgia, 'Times New Roman', serif"
-							/>
-							<Button
-								isDestructive
-								variant="tertiary"
-								onClick={ () => removeFamily( i ) }
-							>
-								{ __( 'Remove', 'multisite-override-style' ) }
-							</Button>
-						</div>
-					) ) }
-					<Button variant="secondary" onClick={ addFontFamily }>
-						{ __(
-							'+ Add font family',
-							'multisite-override-style'
-						) }
-					</Button>
+					<div style={ { display: 'flex', padding: '0 56px 8px 0', fontSize: 11, fontWeight: 500, color: '#757575', textTransform: 'uppercase' } }>
+						<span style={ { flex: 1 } }>{ __( 'Name', 'multisite-override-style' ) }</span>
+						<span style={ { flex: 1 } }>{ __( 'Identifier', 'multisite-override-style' ) }</span>
+					</div>
+					<VStack spacing={ 3 }>
+						{ fontFamilies.map( ( family, i ) => {
+							const isLocked = lockedFamilySlugs.has( family.slug );
+							return (
+								<Card key={ i } size="small">
+									<CardBody>
+										<Flex align="flex-start" gap={ 3 }>
+											<FlexBlock>
+												<VStack spacing={ 3 }>
+													<HStack alignment="stretch" spacing={ 3 }>
+														<TextControl
+															placeholder={ __( 'Heading', 'multisite-override-style' ) }
+															value={ family.name }
+															onChange={ ( v ) => updateFamilyName( i, v ) }
+															__nextHasNoMarginBottom
+															readOnly={ isLocked }
+															disabled={ isLocked }
+														/>
+														<TextControl
+															placeholder={ __( 'heading', 'multisite-override-style' ) }
+															value={ family.slug }
+															onChange={ ( v ) => updateFamilySlug( i, v ) }
+															__nextHasNoMarginBottom
+															readOnly={ isLocked }
+															disabled={ isLocked }
+														/>
+													</HStack>
+													<TextControl
+														label={ __( 'CSS Font Stack', 'multisite-override-style' ) }
+														value={ family.fontFamily }
+														onChange={ ( v ) => updateFamily( i, 'fontFamily', v ) }
+														placeholder="Georgia, 'Times New Roman', serif"
+														__nextHasNoMarginBottom
+													/>
+												</VStack>
+											</FlexBlock>
+											<FlexItem>
+												<Button
+													icon="trash"
+													isDestructive
+													variant="tertiary"
+													onClick={ () => removeFamily( i ) }
+													label={ __( 'Remove', 'multisite-override-style' ) }
+													size="compact"
+													style={ { marginTop: 24 } }
+												/>
+											</FlexItem>
+										</Flex>
+									</CardBody>
+								</Card>
+							);
+						} ) }
+					</VStack>
+					<div style={ { marginTop: 16 } }>
+						<Button variant="secondary" onClick={ addFontFamily }>
+							{ __( '+ Add font family', 'multisite-override-style' ) }
+						</Button>
+					</div>
 				</PanelBody>
 			</Panel>
 
@@ -140,43 +192,88 @@ export default function Typography( { fontFamilies, fontSizes, onChange } ) {
 					initialOpen={ false }
 				>
 					<p className="description">
-						{ __( 'Define font size presets for the block editor.', 'multisite-override-style' ) }
+						{ __( 'Override font size presets for the block editor.', 'multisite-override-style' ) }
 					</p>
-					{ fontSizes.map( ( size, i ) => (
-						<div key={ i } className="mos-font-size-row">
-							<TextControl
-								label={ __( 'Display Name', 'multisite-override-style' ) }
-								help={ __( 'Shown in the size picker (e.g. Small, Medium, Large)', 'multisite-override-style' ) }
-								placeholder={ __( 'e.g. Large', 'multisite-override-style' ) }
-								value={ size.name }
-								onChange={ ( v ) => updateSizeName( i, v ) }
-							/>
-							<TextControl
-								label={ __( 'Identifier', 'multisite-override-style' ) }
-								help={ __( 'Used in CSS: --wp--preset--font-size--{identifier}', 'multisite-override-style' ) }
-								placeholder={ __( 'e.g. large', 'multisite-override-style' ) }
-								value={ size.slug }
-								onChange={ ( v ) => updateSizeSlug( i, v ) }
-							/>
-							<TextControl
-								label={ __( 'CSS Value', 'multisite-override-style' ) }
-								help={ __( 'Any valid CSS size value', 'multisite-override-style' ) }
-								value={ size.size }
-								onChange={ ( v ) => updateSize( i, 'size', v ) }
-								placeholder="e.g. 1.5rem, 24px, clamp(1rem,2vw,1.5rem)"
-							/>
-							<Button
-								isDestructive
-								variant="tertiary"
-								onClick={ () => removeSize( i ) }
-							>
-								{ __( 'Remove', 'multisite-override-style' ) }
-							</Button>
-						</div>
-					) ) }
-					<Button variant="secondary" onClick={ addFontSize }>
-						{ __( '+ Add font size', 'multisite-override-style' ) }
-					</Button>
+					<div style={ { display: 'flex', padding: '0 56px 8px 56px', fontSize: 11, fontWeight: 500, color: '#757575', textTransform: 'uppercase' } }>
+						<span style={ { flex: 1 } }>{ __( 'Name', 'multisite-override-style' ) }</span>
+						<span style={ { flex: 1 } }>{ __( 'Identifier', 'multisite-override-style' ) }</span>
+						<span style={ { flex: 1 } }>{ __( 'Size', 'multisite-override-style' ) }</span>
+					</div>
+					<VStack spacing={ 3 }>
+						{ fontSizes.map( ( size, i ) => {
+							const isLocked = lockedSizeSlugs.has( size.slug );
+							const sizeVal = parseFloat( size.size ) || 16;
+							const isRem = String( size.size ).includes( 'rem' );
+							const previewSize = Math.min( Math.max( isRem ? sizeVal * 16 : sizeVal, 10 ), 20 );
+							return (
+								<Card key={ i } size="small">
+									<CardBody>
+										<Flex align="center" gap={ 3 }>
+											<FlexItem>
+												<div
+													style={ {
+														width: 40,
+														height: 40,
+														display: 'flex',
+														alignItems: 'center',
+														justifyContent: 'center',
+														background: '#1e1e1e',
+														borderRadius: 4,
+														fontWeight: 'bold',
+														color: '#fff',
+														fontSize: previewSize,
+													} }
+												>
+													Aa
+												</div>
+											</FlexItem>
+											<FlexBlock>
+												<HStack alignment="stretch" spacing={ 3 }>
+													<TextControl
+														placeholder={ __( 'Large', 'multisite-override-style' ) }
+														value={ size.name }
+														onChange={ ( v ) => updateSizeName( i, v ) }
+														__nextHasNoMarginBottom
+														readOnly={ isLocked }
+														disabled={ isLocked }
+													/>
+													<TextControl
+														placeholder={ __( 'large', 'multisite-override-style' ) }
+														value={ size.slug }
+														onChange={ ( v ) => updateSizeSlug( i, v ) }
+														__nextHasNoMarginBottom
+														readOnly={ isLocked }
+														disabled={ isLocked }
+													/>
+													<UnitControl
+														value={ size.size }
+														onChange={ ( v ) => updateSize( i, 'size', v ) }
+														units={ CSS_UNITS }
+														__nextHasNoMarginBottom
+													/>
+												</HStack>
+											</FlexBlock>
+											<FlexItem>
+												<Button
+													icon="trash"
+													isDestructive
+													variant="tertiary"
+													onClick={ () => removeSize( i ) }
+													label={ __( 'Remove', 'multisite-override-style' ) }
+													size="compact"
+												/>
+											</FlexItem>
+										</Flex>
+									</CardBody>
+								</Card>
+							);
+						} ) }
+					</VStack>
+					<div style={ { marginTop: 16 } }>
+						<Button variant="secondary" onClick={ addFontSize }>
+							{ __( '+ Add font size', 'multisite-override-style' ) }
+						</Button>
+					</div>
 				</PanelBody>
 			</Panel>
 		</>

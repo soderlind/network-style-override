@@ -1,12 +1,18 @@
-import { useState, useEffect } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import {
 	Button,
 	TextControl,
 	ColorPicker,
-	Popover,
+	Dropdown,
+	Flex,
+	FlexItem,
+	FlexBlock,
 	Panel,
 	PanelBody,
-	BaseControl,
+	Card,
+	CardBody,
+	__experimentalHStack as HStack,
+	__experimentalVStack as VStack,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
@@ -20,12 +26,11 @@ function toSlug( name ) {
 		.replace( /^-|-$/g, '' );
 }
 
-function ColorRow( { color, onChange, onRemove, index } ) {
-	const [ pickerOpen, setPickerOpen ] = useState( false );
+function ColorRow( { color, onChange, onRemove, isLocked } ) {
 	const [ slugEdited, setSlugEdited ] = useState( !! color.slug );
 
-	// Auto-generate slug from name if user hasn't manually edited it
 	const handleNameChange = ( name ) => {
+		if ( isLocked ) return;
 		const updates = { ...color, name };
 		if ( ! slugEdited ) {
 			updates.slug = toSlug( name );
@@ -34,66 +39,85 @@ function ColorRow( { color, onChange, onRemove, index } ) {
 	};
 
 	const handleSlugChange = ( slug ) => {
+		if ( isLocked ) return;
 		setSlugEdited( true );
 		onChange( { ...color, slug: toSlug( slug ) } );
 	};
 
 	return (
-		<div className="mos-color-row">
-			<div className="mos-color-row__swatch">
-				<button
-					className="mos-color-swatch"
-					style={ { backgroundColor: color.color } }
-					onClick={ () => setPickerOpen( ( v ) => ! v ) }
-					aria-label={ __( 'Pick color', 'multisite-override-style' ) }
-					title={ color.color }
-				/>
-				<code className="mos-color-hex">{ color.color }</code>
-			</div>
+		<Card size="small">
+			<CardBody>
+				<Flex align="center" gap={ 3 }>
+					<FlexItem>
+						<Dropdown
+							renderToggle={ ( { isOpen, onToggle } ) => (
+								<button
+									type="button"
+									aria-expanded={ isOpen }
+									onClick={ onToggle }
+									style={ {
+										width: 40,
+										height: 40,
+										borderRadius: 4,
+										border: '1px solid #ddd',
+										cursor: 'pointer',
+										padding: 0,
+										background: color.color || '#000',
+									} }
+								/>
+							) }
+							renderContent={ () => (
+								<div style={ { padding: 16 } }>
+									<ColorPicker
+										color={ color.color }
+										onChange={ ( newColor ) =>
+											onChange( { ...color, color: newColor } )
+										}
+										enableAlpha={ true }
+									/>
+								</div>
+							) }
+						/>
+					</FlexItem>
 
-			{ pickerOpen && (
-				<Popover onClose={ () => setPickerOpen( false ) }>
-					<ColorPicker
-						color={ color.color }
-						onChange={ ( hex ) =>
-							onChange( { ...color, color: hex } )
-						}
-						enableAlpha={ false }
-					/>
-				</Popover>
-			) }
+					<FlexBlock>
+						<HStack alignment="stretch" spacing={ 3 }>
+							<TextControl
+								placeholder={ __( 'Primary', 'multisite-override-style' ) }
+								value={ color.name }
+								onChange={ handleNameChange }
+								__nextHasNoMarginBottom
+								readOnly={ isLocked }
+								disabled={ isLocked }
+							/>
+							<TextControl
+								placeholder={ __( 'primary', 'multisite-override-style' ) }
+								value={ color.slug }
+								onChange={ handleSlugChange }
+								__nextHasNoMarginBottom
+								readOnly={ isLocked }
+								disabled={ isLocked }
+							/>
+						</HStack>
+					</FlexBlock>
 
-			<div className="mos-color-row__fields">
-				<TextControl
-					label={ __( 'Display Name', 'multisite-override-style' ) }
-					help={ __( 'Shown in the editor color picker', 'multisite-override-style' ) }
-					placeholder={ __( 'e.g. Primary Blue', 'multisite-override-style' ) }
-					value={ color.name }
-					onChange={ handleNameChange }
-				/>
-
-				<TextControl
-					label={ __( 'Identifier', 'multisite-override-style' ) }
-					help={ __( 'Used in CSS variables: --wp--preset--color--{identifier}', 'multisite-override-style' ) }
-					placeholder={ __( 'e.g. primary-blue', 'multisite-override-style' ) }
-					value={ color.slug }
-					onChange={ handleSlugChange }
-				/>
-			</div>
-
-			<Button
-				isDestructive
-				variant="tertiary"
-				onClick={ onRemove }
-				className="mos-color-row__remove"
-			>
-				{ __( 'Remove', 'multisite-override-style' ) }
-			</Button>
-		</div>
+					<FlexItem>
+						<Button
+							icon="trash"
+							isDestructive
+							variant="tertiary"
+							onClick={ onRemove }
+							label={ __( 'Remove', 'multisite-override-style' ) }
+							size="compact"
+						/>
+					</FlexItem>
+				</Flex>
+			</CardBody>
+		</Card>
 	);
 }
 
-export default function ColorPaletteField( { colors, onChange } ) {
+export default function ColorPaletteField( { colors, onChange, lockedSlugs = new Set() } ) {
 	const addColor = () => {
 		onChange( [ ...colors, { name: '', slug: '', color: '#000000' } ] );
 	};
@@ -115,21 +139,26 @@ export default function ColorPaletteField( { colors, onChange } ) {
 				initialOpen={ true }
 			>
 				<p className="description">
-					{ __( 'Define colors available in the block editor. Each color needs a display name and an identifier.', 'multisite-override-style' ) }
+					{ __( 'Override colors available in the block editor.', 'multisite-override-style' ) }
 				</p>
-				<div className="mos-color-palette">
+				<div style={ { display: 'flex', padding: '0 56px 8px 56px', fontSize: 11, fontWeight: 500, color: '#757575', textTransform: 'uppercase' } }>
+					<span style={ { flex: 1 } }>{ __( 'Name', 'multisite-override-style' ) }</span>
+					<span style={ { flex: 1 } }>{ __( 'Identifier', 'multisite-override-style' ) }</span>
+				</div>
+
+				<VStack spacing={ 3 }>
 					{ colors.map( ( color, index ) => (
 						<ColorRow
 							key={ index }
-							index={ index }
 							color={ color }
-							onChange={ ( updated ) =>
-								updateColor( index, updated )
-							}
+							onChange={ ( updated ) => updateColor( index, updated ) }
 							onRemove={ () => removeColor( index ) }
+							isLocked={ lockedSlugs.has( color.slug ) }
 						/>
 					) ) }
+				</VStack>
 
+				<div style={ { marginTop: 16 } }>
 					<Button variant="secondary" onClick={ addColor }>
 						{ __( '+ Add color', 'multisite-override-style' ) }
 					</Button>

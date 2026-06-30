@@ -4,7 +4,7 @@ Tags: multisite, network, css, theme.json, branding, global styles
 Requires at least: 6.8
 Tested up to: 7.0
 Requires PHP: 8.3
-Stable tag: 0.4.3
+Stable tag: 0.5.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ Enforce network-wide CSS and theme.json overrides across all subsites in a WordP
 = Key Features =
 
 * **CSS Override** — Write custom CSS in a CodeMirror editor. Styles are appended after all theme stylesheets, giving your rules the final say.
-* **theme.json Override** — Set colors, typography, spacing, and border defaults via a visual UI or raw JSON. Values are deep-merged into the Global Styles layer.
+* **Theme Overrides** — Per-theme CSS and theme.json overrides. Set colors, typography, spacing, and border defaults via a visual UI or raw JSON. Values are deep-merged into the Global Styles layer.
 * **Per-Site Exemptions** — Exempt specific subsites from overrides when needed (network admin only).
 * **Revision History** — Last 10 saves are kept. One-click restore with automatic backup of current settings.
 * **Preview Before Publish** — Preview changes on a live subsite before saving.
@@ -73,16 +73,28 @@ Yes. Click **Preview on site** to open a new tab with your unsaved changes appli
 == Screenshots ==
 
 1. CSS editor with CodeMirror syntax highlighting
-2. Visual theme.json editor (color palette, typography, spacing, borders)
+2. Theme Overrides with visual theme.json editor (color palette, typography, spacing, borders)
 3. Raw JSON editor for advanced users
 4. Site exemption list with search and toggles
 5. Revision history with one-click restore
 
 == Changelog ==
 
+= 0.5.0 =
+* Add: REST endpoint to fetch original theme.json from active theme.
+* Add: Auto-load theme presets when selecting a theme in Theme Overrides.
+* Add: "Reset to theme defaults" button in Theme Overrides.
+* Change: Remove global theme.json tab; theme.json overrides are now per-theme only.
+* Change: Theme preset names and identifiers are now read-only; only values can be modified.
+* Change: Add column headers to visual editor fields for cleaner layout.
+* Change: Improve font size "Aa" preview with dark background.
+* Change: Field descriptions now use "Override" instead of "Define" for clarity.
+
 = 0.4.3 =
 * Add: Norwegian Bokmål (nb_NO) translations.
 * Change: Improved theme.json visual editor UX with clearer labels, contextual help text, auto-generated identifiers.
+* Change: Removed global theme.json tab; theme.json overrides are now per-theme only (in Theme Overrides tab).
+* Change: Theme presets (colors, fonts, spacing) are now read-only; only values can be modified.
 
 = 0.4.2 =
 * Refactor: Unified Save button now saves theme overrides with global settings.

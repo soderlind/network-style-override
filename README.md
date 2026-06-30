@@ -5,7 +5,7 @@ Network-wide CSS and `theme.json` overrides for WordPress Multisite. Enforce bra
 ## Features
 
 - **CSS Override** — CodeMirror editor, appended after all theme stylesheets (priority 9999)
-- **theme.json Override** — Visual fields (colors, typography, spacing, borders) + raw JSON editor
+- **Theme Overrides** — Per-theme CSS and theme.json overrides with visual fields (colors, typography, spacing, borders) + raw JSON editor
 - **Deep Merge** — Values merged into the Global Styles (user) layer via `wp_theme_json_data_user`
 - **Per-Site Exemptions** — Network admin can exempt individual sites
 - **Revision History** — Last 10 saves with one-click restore
@@ -48,7 +48,7 @@ Navigate to **Network Admin → Themes → Override Style**.
 | Tab | Purpose |
 |-----|---------|
 | CSS | Raw CSS editor (CodeMirror) |
-| theme.json | Visual fields + Raw JSON |
+| Theme Overrides | Per-theme CSS + theme.json (Visual fields + Raw JSON) |
 | Sites | Per-site exemption toggles |
 | History | Revision list with restore |
 | Import / Export | JSON download/upload |

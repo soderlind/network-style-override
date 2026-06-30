@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-06-30
+
+### Added
+
+- REST endpoint to fetch original theme.json from active theme (`GET /mos/v1/theme-json/{slug}`).
+- Auto-load theme presets (colors, fonts, spacing) when selecting a theme in Theme Overrides.
+- "Reset to theme defaults" button in Theme Overrides to restore original theme values.
+
+### Changed
+
+- Remove global theme.json tab; theme.json overrides are now per-theme only (in Theme Overrides tab).
+- Theme preset names and identifiers are now read-only; only values can be modified.
+- Add column headers to visual editor fields for cleaner layout.
+- Improve font size "Aa" preview with dark background for better visibility.
+- Change field descriptions from "Define..." to "Override..." for clarity.
+
 ## [0.4.3] - 2026-06-30
 
 ### Added
@@ -16,6 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Improved theme.json visual editor UX: clearer labels ("Display Name", "Identifier"), contextual help text, auto-generated identifiers from names.
+- Removed global theme.json tab; theme.json overrides are now per-theme only (in Theme Overrides tab).
+- Theme presets (colors, fonts, spacing) loaded from the active theme are now read-only; only values can be modified.
+- Added column headers to visual editor fields for cleaner layout.
+- Improved "Aa" font size preview visibility with dark background.
 
 ## [0.4.2] - 2026-06-30
 
