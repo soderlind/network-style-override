@@ -80,7 +80,7 @@ msgid "Preview on site"
 msgstr ""
 
 #: resources/js/components/CssEditor.jsx:10
-msgid "CSS entered here is appended after all theme stylesheets on every subsite front-end (except exempted sites)."
+msgid "CSS entered here is appended after all theme stylesheets on every subsite front-end (except <link>exempted sites</link>)."
 msgstr ""
 
 #: resources/js/components/ThemeJsonEditor/index.jsx:13

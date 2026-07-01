@@ -3,7 +3,7 @@
  * Plugin Name:       Network Style Override
  * Plugin URI:        https://github.com/soderlind/network-style-override
  * Description:       Network-wide CSS and theme.json overrides for WordPress Multisite. Enforces brand consistency across all subsites.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Author:            Per Søderlind
  * Author URI:        https://soderlind.no
  * Requires at least: 6.8
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'NSO_VERSION', '1.0.2' );
+define( 'NSO_VERSION', '1.0.3' );
 define( 'NSO_PLUGIN_FILE', __FILE__ );
 define( 'NSO_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'NSO_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

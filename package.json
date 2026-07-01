@@ -1,6 +1,6 @@
 {
 	"name": "network-style-override",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Network-wide CSS and theme.json overrides for WordPress Multisite",
 	"license": "GPL-2.0-or-later",
 	"private": true,

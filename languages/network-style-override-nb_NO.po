@@ -83,8 +83,8 @@ msgid "Preview on site"
 msgstr "Forhåndsvis på nettsted"
 
 #: resources/js/components/CssEditor.jsx:10
-msgid "CSS entered here is appended after all theme stylesheets on every subsite front-end (except exempted sites)."
-msgstr "CSS som skrives inn her legges til etter alle tema-stilark på alle undernettsteders grensesnitt (unntatt unntatte nettsteder)."
+msgid "CSS entered here is appended after all theme stylesheets on every subsite front-end (except <link>exempted sites</link>)."
+msgstr "CSS som skrives inn her legges til etter alle tema-stilark på alle undernettsteders grensesnitt (unntatt <link>unntatte nettsteder</link>)."
 
 #: resources/js/components/ThemeJsonEditor/index.jsx:13
 msgid "Values are deep-merged into the user (Global Styles) layer — network values take precedence. Applies to block themes only."

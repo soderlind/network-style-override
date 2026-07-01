@@ -31,6 +31,7 @@ export default function ThemeOverrides( {
 	onDelete,
 	loading,
 	deleting,
+	onNavigateToSites,
 } ) {
 	const [ selectedTheme, setSelectedTheme ] = useState( '' );
 	const [ originalThemeJson, setOriginalThemeJson ] = useState( {} );
@@ -231,6 +232,7 @@ export default function ThemeOverrides( {
 										<CssEditor
 											value={ currentOverride.css }
 											onChange={ handleCssChange }
+											onNavigateToSites={ onNavigateToSites }
 										/>
 									) }
 									{ tab.name === 'theme-json' && (

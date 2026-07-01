@@ -213,7 +213,12 @@ export default function App() {
 				) }
 			</div>
 
-			<TabPanel tabs={ tabs } onSelect={ setActiveTab }>
+			<TabPanel
+				key={ activeTab }
+				tabs={ tabs }
+				onSelect={ setActiveTab }
+				initialTabName={ activeTab }
+			>
 				{ ( tab ) => (
 					<div className="mos-tab-content">
 						{ tab.name === 'css' && (
@@ -222,6 +227,7 @@ export default function App() {
 								onChange={ ( css ) =>
 									setSettings( { ...settings, css } )
 								}
+								onNavigateToSites={ () => setActiveTab( 'sites' ) }
 							/>
 						) }
 						{ tab.name === 'theme-overrides' && (
@@ -233,6 +239,7 @@ export default function App() {
 								onDelete={ handleThemeOverrideDelete }
 								loading={ themesLoading }
 								deleting={ deleting }
+								onNavigateToSites={ () => setActiveTab( 'sites' ) }
 							/>
 						) }
 						{ tab.name === 'sites' && (
