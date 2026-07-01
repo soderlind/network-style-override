@@ -23,6 +23,13 @@ final class Plugin {
 			return;
 		}
 
+		// Load translations.
+		load_plugin_textdomain(
+			'network-style-override',
+			false,
+			dirname( plugin_basename( NSO_PLUGIN_FILE ) ) . '/languages'
+		);
+
 		// Migrate from old option keys (mos_* → nso_*) on first load.
 		$this->maybe_migrate_options();
 

@@ -77,6 +77,12 @@ final class NetworkAdminPage {
 			true,
 		);
 
+		wp_set_script_translations(
+			'nso-admin',
+			'network-style-override',
+			NSO_PLUGIN_DIR . 'languages'
+		);
+
 		// Only enqueue CSS if it exists.
 		$css_file = NSO_PLUGIN_DIR . 'build/index.css';
 		if ( file_exists( $css_file ) ) {

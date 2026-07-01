@@ -4,7 +4,7 @@ Tags: multisite, network, css, theme.json, branding, global styles
 Requires at least: 6.8
 Tested up to: 7.0
 Requires PHP: 8.3
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,10 @@ Yes. Click **Preview on site** to open a new tab with your unsaved changes appli
 5. Revision history with one-click restore
 
 == Changelog ==
+
+= 1.0.4 =
+* Fix: Translation loading with load_plugin_textdomain and wp_set_script_translations.
+* Fix: Add missing Norwegian (nb_NO) translations.
 
 = 1.0.3 =
 * Add: Clickable link from "exempted sites" text to Sites tab.

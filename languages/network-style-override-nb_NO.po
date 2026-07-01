@@ -405,3 +405,143 @@ msgstr "Tilbakestill til temastandard"
 #: src/Admin/RestController.php
 msgid "Theme not found."
 msgstr "Tema ikke funnet."
+
+#: resources/js/components/ThemeOverrides.jsx
+msgid "Add CSS or theme.json overrides that apply only to specific themes. These are applied after the global overrides."
+msgstr "Legg til CSS- eller theme.json-overstyringer som kun gjelder for bestemte temaer. Disse brukes etter de globale overstyringene."
+
+#: resources/js/components/visual-fields/ColorPalette.jsx
+msgid "Color"
+msgstr "Farge"
+
+#: resources/js/components/visual-fields/BorderControls.jsx
+msgid "Dashed"
+msgstr "Stiplet"
+
+#: resources/js/components/ThemeOverrides.jsx
+msgid "Delete Override"
+msgstr "Slett overstyring"
+
+#: resources/js/components/ThemeOverrides.jsx
+msgid "Delete all overrides for this theme?"
+msgstr "Slette alle overstyringer for dette temaet?"
+
+#: resources/js/components/ThemeOverrides.jsx
+msgid "Delete failed."
+msgstr "Sletting mislyktes."
+
+#: resources/js/components/visual-fields/BorderControls.jsx
+msgid "Dotted"
+msgstr "Prikket"
+
+#: resources/js/components/visual-fields/BorderControls.jsx
+msgid "Double"
+msgstr "Dobbel"
+
+#: resources/js/components/App.jsx
+msgid "Failed to load theme data."
+msgstr "Kunne ikke laste temadata."
+
+#: resources/js/components/visual-fields/Typography.jsx
+msgid "Heading"
+msgstr "Overskrift"
+
+#: resources/js/components/ImportExport.jsx
+msgid "Import settings…"
+msgstr "Importer innstillinger…"
+
+#: resources/js/components/visual-fields/Typography.jsx
+msgid "Large"
+msgstr "Stor"
+
+#: resources/js/components/visual-fields/Typography.jsx
+msgid "Medium"
+msgstr "Medium"
+
+#: resources/js/components/visual-fields/ColorPalette.jsx
+msgid "Name"
+msgstr "Navn"
+
+#: network-style-override.php
+msgid "Network-wide CSS and theme.json overrides for WordPress Multisite. Enforces brand consistency across all subsites."
+msgstr "Nettverksdekkende CSS- og theme.json-overstyringer for WordPress Multisite. Sikrer merkevarekonsekvens på alle undersider."
+
+#: resources/js/components/ThemeOverrides.jsx
+msgid "No themes found in the network."
+msgstr "Ingen temaer funnet i nettverket."
+
+#: resources/js/components/visual-fields/BorderControls.jsx
+msgid "None"
+msgstr "Ingen"
+
+#: resources/js/components/visual-fields/ColorPalette.jsx
+msgid "Override colors available in the block editor."
+msgstr "Overstyr farger tilgjengelige i blokkredigeringsprogrammet."
+
+#: resources/js/components/visual-fields/BorderControls.jsx
+msgid "Override default border styles."
+msgstr "Overstyr standard kantlinjestiler."
+
+#: resources/js/components/visual-fields/Typography.jsx
+msgid "Override font size presets for the block editor."
+msgstr "Overstyr forhåndsinnstilte skriftstørrelser for blokkredigeringsprogrammet."
+
+#: resources/js/components/visual-fields/Typography.jsx
+msgid "Override font stacks available in the block editor."
+msgstr "Overstyr skriftstakker tilgjengelige i blokkredigeringsprogrammet."
+
+#: resources/js/components/visual-fields/Spacing.jsx
+msgid "Override spacing presets for padding, margin, and gap."
+msgstr "Overstyr avstandsforhåndsinnstillinger for utfylling, marg og mellomrom."
+
+#: resources/js/components/App.jsx
+msgid "Preview"
+msgstr "Forhåndsvisning"
+
+#: resources/js/components/visual-fields/ColorPalette.jsx
+msgid "Primary"
+msgstr "Primær"
+
+#: resources/js/components/visual-fields/BorderControls.jsx
+msgid "Radius"
+msgstr "Radius"
+
+#: resources/js/components/ThemeOverrides.jsx
+msgid "Select Theme"
+msgstr "Velg tema"
+
+#: resources/js/components/visual-fields/Typography.jsx
+msgid "Size"
+msgstr "Størrelse"
+
+#: resources/js/components/visual-fields/BorderControls.jsx
+msgid "Solid"
+msgstr "Heltrukket"
+
+#: resources/js/components/visual-fields/BorderControls.jsx
+msgid "Style"
+msgstr "Stil"
+
+#: resources/js/components/App.jsx
+msgid "Theme Overrides"
+msgstr "Temaoverstyringer"
+
+#: resources/js/components/visual-fields/BorderControls.jsx
+msgid "Width"
+msgstr "Bredde"
+
+#: resources/js/components/visual-fields/Typography.jsx
+msgid "heading"
+msgstr "overskrift"
+
+#: resources/js/components/visual-fields/Typography.jsx
+msgid "large"
+msgstr "stor"
+
+#: resources/js/components/visual-fields/Typography.jsx
+msgid "medium"
+msgstr "medium"
+
+#: resources/js/components/visual-fields/ColorPalette.jsx
+msgid "primary"
+msgstr "primaer"

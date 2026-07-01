@@ -1,0 +1,374 @@
+{
+    "translation-revision-date": "2026-07-01 19:57:22+00:00",
+    "generator": "make-json.php",
+    "domain": "messages",
+    "locale_data": {
+        "messages": {
+            "": {
+                "domain": "network-style-override",
+                "lang": "nb_NO",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Failed to load settings.": [
+                "Kunne ikke laste innstillinger."
+            ],
+            "Save failed.": [
+                "Lagring mislyktes."
+            ],
+            "Preview failed.": [
+                "Forhåndsvisning mislyktes."
+            ],
+            "Settings saved.": [
+                "Innstillinger lagret."
+            ],
+            "Sites": [
+                "Nettsteder"
+            ],
+            "History": [
+                "Historikk"
+            ],
+            "Import \/ Export": [
+                "Importer \/ Eksporter"
+            ],
+            "Network Style Override": [
+                "Nettverksstil-overstyring"
+            ],
+            "Save": [
+                "Lagre"
+            ],
+            "Preview on site": [
+                "Forhåndsvis på nettsted"
+            ],
+            "CSS entered here is appended after all theme stylesheets on every subsite front-end (except <link>exempted sites<\/link>).": [
+                "CSS som skrives inn her legges til etter alle tema-stilark på alle undernettsteders grensesnitt (unntatt <link>unntatte nettsteder<\/link>)."
+            ],
+            "Values are deep-merged into the user (Global Styles) layer — network values take precedence. Applies to block themes only.": [
+                "Verdier flettes dypt inn i brukerens (Globale stiler) lag — nettverksverdier har forrang. Gjelder kun for blokktemaer."
+            ],
+            "Visual": [
+                "Visuell"
+            ],
+            "Raw JSON": [
+                "Rå JSON"
+            ],
+            "Invalid JSON — changes will not be saved until fixed.": [
+                "Ugyldig JSON — endringer lagres ikke før dette er rettet."
+            ],
+            "Pick color": [
+                "Velg farge"
+            ],
+            "Display Name": [
+                "Visningsnavn"
+            ],
+            "Shown in the editor color picker": [
+                "Vises i redigeringsprogrammets fargevelger"
+            ],
+            "e.g. Primary Blue": [
+                "f.eks. Primærblå"
+            ],
+            "Identifier": [
+                "Identifikator"
+            ],
+            "Used in CSS variables: --wp--preset--color--{identifier}": [
+                "Brukes i CSS-variabler: --wp--preset--color--{identifikator}"
+            ],
+            "e.g. primary-blue": [
+                "f.eks. primaer-blaa"
+            ],
+            "Remove": [
+                "Fjern"
+            ],
+            "Color Palette": [
+                "Fargepalett"
+            ],
+            "Define colors available in the block editor. Each color needs a display name and an identifier.": [
+                "Definer farger tilgjengelig i blokkredigeringsprogrammet. Hver farge trenger et visningsnavn og en identifikator."
+            ],
+            "+ Add color": [
+                "+ Legg til farge"
+            ],
+            "Font Families": [
+                "Skriftfamilier"
+            ],
+            "Define font stacks available in the block editor.": [
+                "Definer skriftstakker tilgjengelig i blokkredigeringsprogrammet."
+            ],
+            "Shown in the font picker dropdown": [
+                "Vises i skriftvelger-rullegardinmenyen"
+            ],
+            "e.g. Heading Font": [
+                "f.eks. Overskriftsskrift"
+            ],
+            "Used in CSS: --wp--preset--font-family--{identifier}": [
+                "Brukes i CSS: --wp--preset--font-family--{identifikator}"
+            ],
+            "e.g. heading-font": [
+                "f.eks. overskrift-skrift"
+            ],
+            "CSS Font Stack": [
+                "CSS-skriftstakk"
+            ],
+            "The actual CSS font-family value": [
+                "Den faktiske CSS font-family-verdien"
+            ],
+            "+ Add font family": [
+                "+ Legg til skriftfamilie"
+            ],
+            "Font Sizes": [
+                "Skriftstørrelser"
+            ],
+            "Define font size presets for the block editor.": [
+                "Definer forhåndsinnstilte skriftstørrelser for blokkredigeringsprogrammet."
+            ],
+            "Shown in the size picker (e.g. Small, Medium, Large)": [
+                "Vises i størrelsesvelgeren (f.eks. Liten, Medium, Stor)"
+            ],
+            "e.g. Large": [
+                "f.eks. Stor"
+            ],
+            "Used in CSS: --wp--preset--font-size--{identifier}": [
+                "Brukes i CSS: --wp--preset--font-size--{identifikator}"
+            ],
+            "e.g. large": [
+                "f.eks. stor"
+            ],
+            "CSS Value": [
+                "CSS-verdi"
+            ],
+            "Any valid CSS size value": [
+                "Enhver gyldig CSS-størrelsesverdi"
+            ],
+            "+ Add font size": [
+                "+ Legg til skriftstørrelse"
+            ],
+            "Spacing Scale": [
+                "Avstandsskala"
+            ],
+            "Define spacing presets for padding, margin, and gap. These appear in the block editor spacing controls.": [
+                "Definer avstandsforhåndsinnstillinger for utfylling, marg og mellomrom. Disse vises i blokkredigeringsprogrammets avstandskontroller."
+            ],
+            "Shown in the spacing picker (e.g. Small, Medium)": [
+                "Vises i avstandsvelgeren (f.eks. Liten, Medium)"
+            ],
+            "e.g. Medium": [
+                "f.eks. Medium"
+            ],
+            "Used in CSS: --wp--preset--spacing--{identifier}": [
+                "Brukes i CSS: --wp--preset--spacing--{identifikator}"
+            ],
+            "e.g. medium": [
+                "f.eks. medium"
+            ],
+            "Any valid CSS size": [
+                "Enhver gyldig CSS-størrelse"
+            ],
+            "+ Add spacing size": [
+                "+ Legg til avstandsstørrelse"
+            ],
+            "Border Defaults": [
+                "Kantlinjestandard"
+            ],
+            "Border Radius": [
+                "Kantlinjeradius"
+            ],
+            "Applied globally via styles.border.radius in theme.json.": [
+                "Brukes globalt via styles.border.radius i theme.json."
+            ],
+            "Border Width": [
+                "Kantlinjebredde"
+            ],
+            "Applied globally via styles.border.width in theme.json.": [
+                "Brukes globalt via styles.border.width i theme.json."
+            ],
+            "Border Style": [
+                "Kantlinjestil"
+            ],
+            "Border Color": [
+                "Kantlinjefarge"
+            ],
+            "Failed to load sites.": [
+                "Kunne ikke laste nettsteder."
+            ],
+            "Failed to update exemption.": [
+                "Kunne ikke oppdatere unntak."
+            ],
+            "Exempted sites will not receive any network CSS or theme.json overrides.": [
+                "Unntatte nettsteder vil ikke motta nettverkets CSS- eller theme.json-overstyringer."
+            ],
+            "Search sites…": [
+                "Søk etter nettsteder…"
+            ],
+            "Site": [
+                "Nettsted"
+            ],
+            "Exempt from overrides": [
+                "Unntatt fra overstyringer"
+            ],
+            "No sites found.": [
+                "Ingen nettsteder funnet."
+            ],
+            "Failed to load revisions.": [
+                "Kunne ikke laste revisjoner."
+            ],
+            "Restore this revision? The current settings will be saved as a new revision first.": [
+                "Gjenopprette denne revisjonen? Gjeldende innstillinger lagres som en ny revisjon først."
+            ],
+            "Restore failed.": [
+                "Gjenoppretting mislyktes."
+            ],
+            "The last 10 saves are kept. Restoring a revision saves the current settings as a new revision first.": [
+                "De siste 10 lagringene beholdes. Gjenoppretting av en revisjon lagrer gjeldende innstillinger som en ny revisjon først."
+            ],
+            "No revisions yet. Save your settings to create the first revision.": [
+                "Ingen revisjoner ennå. Lagre innstillingene dine for å opprette den første revisjonen."
+            ],
+            "Saved": [
+                "Lagret"
+            ],
+            "Author": [
+                "Forfatter"
+            ],
+            "current": [
+                "gjeldende"
+            ],
+            "Restore": [
+                "Gjenopprett"
+            ],
+            "Export failed.": [
+                "Eksportering mislyktes."
+            ],
+            "This will overwrite all current settings (CSS, theme.json, exemptions). The current settings will be saved as a revision first. Continue?": [
+                "Dette vil overskrive alle gjeldende innstillinger (CSS, theme.json, unntak). Gjeldende innstillinger lagres som en revisjon først. Fortsette?"
+            ],
+            "Invalid bundle: missing css or theme_json fields.": [
+                "Ugyldig pakke: mangler css- eller theme_json-felt."
+            ],
+            "Settings imported successfully.": [
+                "Innstillinger importert."
+            ],
+            "Import failed. Make sure the file is a valid MOS export.": [
+                "Importering mislyktes. Kontroller at filen er en gyldig MOS-eksport."
+            ],
+            "Export": [
+                "Eksporter"
+            ],
+            "Download all current settings (CSS, theme.json, exemptions) as a JSON file.": [
+                "Last ned alle gjeldende innstillinger (CSS, theme.json, unntak) som en JSON-fil."
+            ],
+            "Export settings": [
+                "Eksporter innstillinger"
+            ],
+            "Import": [
+                "Importer"
+            ],
+            "Import settings from a previously exported JSON file. Current settings will be preserved as a revision.": [
+                "Importer innstillinger fra en tidligere eksportert JSON-fil. Gjeldende innstillinger bevares som en revisjon."
+            ],
+            "Select JSON file to import": [
+                "Velg JSON-fil for importering"
+            ],
+            "Loading theme.json…": [
+                "Laster theme.json…"
+            ],
+            "Reset to theme defaults? This will replace your current theme.json override with the original from the theme.": [
+                "Tilbakestill til temastandard? Dette erstatter din gjeldende theme.json-overstyring med originalen fra temaet."
+            ],
+            "Reset to theme defaults": [
+                "Tilbakestill til temastandard"
+            ],
+            "Add CSS or theme.json overrides that apply only to specific themes. These are applied after the global overrides.": [
+                "Legg til CSS- eller theme.json-overstyringer som kun gjelder for bestemte temaer. Disse brukes etter de globale overstyringene."
+            ],
+            "Color": [
+                "Farge"
+            ],
+            "Dashed": [
+                "Stiplet"
+            ],
+            "Delete Override": [
+                "Slett overstyring"
+            ],
+            "Delete all overrides for this theme?": [
+                "Slette alle overstyringer for dette temaet?"
+            ],
+            "Delete failed.": [
+                "Sletting mislyktes."
+            ],
+            "Dotted": [
+                "Prikket"
+            ],
+            "Double": [
+                "Dobbel"
+            ],
+            "Failed to load theme data.": [
+                "Kunne ikke laste temadata."
+            ],
+            "Heading": [
+                "Overskrift"
+            ],
+            "Import settings…": [
+                "Importer innstillinger…"
+            ],
+            "Large": [
+                "Stor"
+            ],
+            "Name": [
+                "Navn"
+            ],
+            "No themes found in the network.": [
+                "Ingen temaer funnet i nettverket."
+            ],
+            "None": [
+                "Ingen"
+            ],
+            "Override colors available in the block editor.": [
+                "Overstyr farger tilgjengelige i blokkredigeringsprogrammet."
+            ],
+            "Override default border styles.": [
+                "Overstyr standard kantlinjestiler."
+            ],
+            "Override font size presets for the block editor.": [
+                "Overstyr forhåndsinnstilte skriftstørrelser for blokkredigeringsprogrammet."
+            ],
+            "Override font stacks available in the block editor.": [
+                "Overstyr skriftstakker tilgjengelige i blokkredigeringsprogrammet."
+            ],
+            "Override spacing presets for padding, margin, and gap.": [
+                "Overstyr avstandsforhåndsinnstillinger for utfylling, marg og mellomrom."
+            ],
+            "Preview": [
+                "Forhåndsvisning"
+            ],
+            "Primary": [
+                "Primær"
+            ],
+            "Select Theme": [
+                "Velg tema"
+            ],
+            "Size": [
+                "Størrelse"
+            ],
+            "Solid": [
+                "Heltrukket"
+            ],
+            "Style": [
+                "Stil"
+            ],
+            "Theme Overrides": [
+                "Temaoverstyringer"
+            ],
+            "Width": [
+                "Bredde"
+            ],
+            "heading": [
+                "overskrift"
+            ],
+            "large": [
+                "stor"
+            ],
+            "primary": [
+                "primaer"
+            ]
+        }
+    }
+}

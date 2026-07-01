@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-07-01
+
+### Fixed
+
+- Fix translation loading with load_plugin_textdomain and wp_set_script_translations.
+- Add missing Norwegian (nb_NO) translations.
+
 ## [1.0.3] - 2026-07-01
 
 ### Added
