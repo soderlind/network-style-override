@@ -3,6 +3,16 @@
 	"description": "Network-wide CSS and theme.json overrides for WordPress Multisite",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress",
+		"multisite",
+		"network",
+		"css",
+		"theme-json",
+		"override",
+		"styles",
+		"branding"
+	],
 	"autoload": {
 		"psr-4": {
 			"NetworkStyleOverride\\": "src/"
