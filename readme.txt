@@ -4,7 +4,7 @@ Tags: multisite, network, css, theme.json, branding, global styles
 Requires at least: 6.8
 Tested up to: 7.0
 Requires PHP: 8.3
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,10 @@ Yes. Click **Preview on site** to open a new tab with your unsaved changes appli
 5. Revision history with one-click restore
 
 == Changelog ==
+
+= 1.0.6 =
+* Change: Make the entire color palette row clickable to open the color picker.
+* Change: Replace the README screenshot and add a caption.
 
 = 1.0.5 =
 * Change: Redesign the theme.json visual editor (color palette, typography, spacing, border defaults) to match the WordPress Site Editor UI.
