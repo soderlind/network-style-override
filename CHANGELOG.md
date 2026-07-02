@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.5] - 2026-07-02
+
+### Changed
+
+- Redesign the theme.json visual editor (color palette, typography, spacing, border defaults) to match the WordPress Site Editor UI.
+
 ## [1.0.4] - 2026-07-01
 
 ### Fixed
