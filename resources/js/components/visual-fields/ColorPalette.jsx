@@ -6,7 +6,7 @@ import {
 	Panel,
 	PanelBody,
 } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import NameSlugFields from './NameSlugFields';
 
 /**
@@ -38,46 +38,64 @@ function ColorRow( { color, onChange, isLocked } ) {
 	};
 
 	return (
-		<div className="nso-preset-row">
-			<div className="nso-preset-row__preview">
-				<Dropdown
-					renderToggle={ ( { isOpen, onToggle } ) => (
-						<button
-							type="button"
-							className="nso-swatch-toggle"
-							aria-label={ __( 'Edit color', 'network-style-override' ) }
-							aria-expanded={ isOpen }
-							onClick={ onToggle }
-						>
-							<ColorIndicator colorValue={ color.color || '#000' } />
-						</button>
+		<Dropdown
+			className="nso-color-dropdown"
+			popoverProps={ { placement: 'bottom-start' } }
+			renderToggle={ ( { isOpen, onToggle } ) => (
+				<div
+					className="nso-preset-row nso-preset-row--clickable"
+					role="button"
+					tabIndex={ 0 }
+					aria-haspopup="dialog"
+					aria-expanded={ isOpen }
+					aria-label={ sprintf(
+						/* translators: %s: color name. */
+						__( 'Edit color: %s', 'network-style-override' ),
+						color.name || color.slug || color.color || ''
 					) }
-					renderContent={ () => (
-						<div style={ { padding: 16 } }>
-							<ColorPicker
-								color={ color.color }
-								onChange={ ( newColor ) =>
-									onChange( { ...color, color: newColor } )
-								}
-								enableAlpha={ true }
-							/>
-						</div>
-					) }
-				/>
-			</div>
+					onClick={ onToggle }
+					onKeyDown={ ( event ) => {
+						if ( event.key === 'Enter' || event.key === ' ' ) {
+							event.preventDefault();
+							onToggle();
+						}
+					} }
+				>
+					<div className="nso-preset-row__preview">
+						<ColorIndicator colorValue={ color.color || '#000' } />
+					</div>
 
-			<div className="nso-preset-row__fields">
-				<NameSlugFields
-					name={ color.name }
-					slug={ color.slug }
-					isLocked={ isLocked }
-					onNameChange={ handleNameChange }
-					onSlugChange={ handleSlugChange }
-					namePlaceholder={ __( 'Primary', 'network-style-override' ) }
-					slugPlaceholder={ __( 'primary', 'network-style-override' ) }
-				/>
-			</div>
-		</div>
+					<div
+						className="nso-preset-row__fields"
+						{ ...( ! isLocked && {
+							onClick: ( event ) => event.stopPropagation(),
+							onKeyDown: ( event ) => event.stopPropagation(),
+						} ) }
+					>
+						<NameSlugFields
+							name={ color.name }
+							slug={ color.slug }
+							isLocked={ isLocked }
+							onNameChange={ handleNameChange }
+							onSlugChange={ handleSlugChange }
+							namePlaceholder={ __( 'Primary', 'network-style-override' ) }
+							slugPlaceholder={ __( 'primary', 'network-style-override' ) }
+						/>
+					</div>
+				</div>
+			) }
+			renderContent={ () => (
+				<div style={ { padding: 16 } }>
+					<ColorPicker
+						color={ color.color }
+						onChange={ ( newColor ) =>
+							onChange( { ...color, color: newColor } )
+						}
+						enableAlpha={ true }
+					/>
+				</div>
+			) }
+		/>
 	);
 }
 

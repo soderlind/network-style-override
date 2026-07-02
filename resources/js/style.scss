@@ -67,6 +67,26 @@
 	}
 }
 
+// Whole-row click target (color palette) — opens the color picker.
+.nso-preset-row--clickable {
+	cursor: pointer;
+
+	&:focus-visible {
+		outline: 2px solid var( --wp-admin-theme-color, #3858e9 );
+		outline-offset: -2px;
+	}
+}
+
+// The color rows are each wrapped in a Dropdown; make the wrapper behave
+// like a full-width list row and keep the hairline separators.
+.nso-preset-list > .nso-color-dropdown {
+	display: block;
+}
+
+.nso-color-dropdown + .nso-color-dropdown .nso-preset-row {
+	border-top: 1px solid #f0f0f1;
+}
+
 .nso-preset-row__preview {
 	flex: 0 0 32px;
 	display: flex;
