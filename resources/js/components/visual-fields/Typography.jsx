@@ -3,16 +3,10 @@ import {
 	TextControl,
 	Panel,
 	PanelBody,
-	Flex,
-	FlexItem,
-	FlexBlock,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
 	__experimentalUnitControl as UnitControl,
-	Card,
-	CardBody,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import NameSlugFields from './NameSlugFields';
 
 /**
  * Convert a name to a valid slug (kebab-case).
@@ -105,52 +99,39 @@ export default function Typography( { fontFamilies, fontSizes, onChange, lockedF
 					<p className="description">
 						{ __( 'Override font stacks available in the block editor.', 'network-style-override' ) }
 					</p>
-					<div style={ { display: 'flex', padding: '0 56px 8px 0', fontSize: 11, fontWeight: 500, color: '#757575', textTransform: 'uppercase' } }>
-						<span style={ { flex: 1 } }>{ __( 'Name', 'network-style-override' ) }</span>
-						<span style={ { flex: 1 } }>{ __( 'Identifier', 'network-style-override' ) }</span>
-					</div>
-					<VStack spacing={ 3 }>
+					<div className="nso-preset-list">
+						<div className="nso-preset-list__header is-no-preview">
+							<span>{ __( 'Name', 'network-style-override' ) }</span>
+							<span>{ __( 'Identifier', 'network-style-override' ) }</span>
+						</div>
 						{ fontFamilies.map( ( family, i ) => {
 							const isLocked = lockedFamilySlugs.has( family.slug );
 							return (
-								<Card key={ i } size="small">
-									<CardBody>
-										<Flex align="flex-start" gap={ 3 }>
-											<FlexBlock>
-												<VStack spacing={ 3 }>
-													<HStack alignment="stretch" spacing={ 3 }>
-														<TextControl
-															placeholder={ __( 'Heading', 'network-style-override' ) }
-															value={ family.name }
-															onChange={ ( v ) => updateFamilyName( i, v ) }
-															__nextHasNoMarginBottom
-															readOnly={ isLocked }
-															disabled={ isLocked }
-														/>
-														<TextControl
-															placeholder={ __( 'heading', 'network-style-override' ) }
-															value={ family.slug }
-															onChange={ ( v ) => updateFamilySlug( i, v ) }
-															__nextHasNoMarginBottom
-															readOnly={ isLocked }
-															disabled={ isLocked }
-														/>
-													</HStack>
-													<TextControl
-														label={ __( 'CSS Font Stack', 'network-style-override' ) }
-														value={ family.fontFamily }
-														onChange={ ( v ) => updateFamily( i, 'fontFamily', v ) }
-														placeholder="Georgia, 'Times New Roman', serif"
-														__nextHasNoMarginBottom
-													/>
-												</VStack>
-											</FlexBlock>
-									</Flex>
-								</CardBody>
-							</Card>
-						);
+								<div key={ i } className="nso-preset-row">
+									<div className="nso-preset-row__stack">
+										<div className="nso-preset-row__cols">
+											<NameSlugFields
+												name={ family.name }
+												slug={ family.slug }
+												isLocked={ isLocked }
+												onNameChange={ ( v ) => updateFamilyName( i, v ) }
+												onSlugChange={ ( v ) => updateFamilySlug( i, v ) }
+												namePlaceholder={ __( 'Heading', 'network-style-override' ) }
+												slugPlaceholder={ __( 'heading', 'network-style-override' ) }
+											/>
+										</div>
+										<TextControl
+											label={ __( 'CSS Font Stack', 'network-style-override' ) }
+											value={ family.fontFamily }
+											onChange={ ( v ) => updateFamily( i, 'fontFamily', v ) }
+											placeholder="Georgia, 'Times New Roman', serif"
+											__nextHasNoMarginBottom
+										/>
+									</div>
+								</div>
+							);
 						} ) }
-					</VStack>
+					</div>
 				</PanelBody>
 			</Panel>
 
@@ -162,71 +143,45 @@ export default function Typography( { fontFamilies, fontSizes, onChange, lockedF
 					<p className="description">
 						{ __( 'Override font size presets for the block editor.', 'network-style-override' ) }
 					</p>
-					<div style={ { display: 'flex', padding: '0 56px 8px 56px', fontSize: 11, fontWeight: 500, color: '#757575', textTransform: 'uppercase' } }>
-						<span style={ { flex: 1 } }>{ __( 'Name', 'network-style-override' ) }</span>
-						<span style={ { flex: 1 } }>{ __( 'Identifier', 'network-style-override' ) }</span>
-						<span style={ { flex: 1 } }>{ __( 'Size', 'network-style-override' ) }</span>
-					</div>
-					<VStack spacing={ 3 }>
+					<div className="nso-preset-list">
+						<div className="nso-preset-list__header">
+							<span>{ __( 'Name', 'network-style-override' ) }</span>
+							<span>{ __( 'Identifier', 'network-style-override' ) }</span>
+							<span>{ __( 'Size', 'network-style-override' ) }</span>
+						</div>
 						{ fontSizes.map( ( size, i ) => {
 							const isLocked = lockedSizeSlugs.has( size.slug );
 							const sizeVal = parseFloat( size.size ) || 16;
 							const isRem = String( size.size ).includes( 'rem' );
 							const previewSize = Math.min( Math.max( isRem ? sizeVal * 16 : sizeVal, 10 ), 20 );
 							return (
-								<Card key={ i } size="small">
-									<CardBody>
-										<Flex align="center" gap={ 3 }>
-											<FlexItem>
-												<div
-													style={ {
-														width: 40,
-														height: 40,
-														display: 'flex',
-														alignItems: 'center',
-														justifyContent: 'center',
-														background: '#1e1e1e',
-														borderRadius: 4,
-														fontWeight: 'bold',
-														color: '#fff',
-														fontSize: previewSize,
-													} }
-												>
-													Aa
-												</div>
-											</FlexItem>
-											<FlexBlock>
-												<HStack alignment="stretch" spacing={ 3 }>
-													<TextControl
-														placeholder={ __( 'Large', 'network-style-override' ) }
-														value={ size.name }
-														onChange={ ( v ) => updateSizeName( i, v ) }
-														__nextHasNoMarginBottom
-														readOnly={ isLocked }
-														disabled={ isLocked }
-													/>
-													<TextControl
-														placeholder={ __( 'large', 'network-style-override' ) }
-														value={ size.slug }
-														onChange={ ( v ) => updateSizeSlug( i, v ) }
-														__nextHasNoMarginBottom
-														readOnly={ isLocked }
-														disabled={ isLocked }
-													/>
-													<UnitControl
-														value={ size.size }
-														onChange={ ( v ) => updateSize( i, 'size', v ) }
-														units={ CSS_UNITS }
-														__nextHasNoMarginBottom
-													/>
-												</HStack>
-											</FlexBlock>
-										</Flex>
-									</CardBody>
-								</Card>
+								<div key={ i } className="nso-preset-row">
+									<div className="nso-preset-row__preview">
+										<div className="nso-preview-tile" style={ { fontSize: previewSize } }>
+											Aa
+										</div>
+									</div>
+									<div className="nso-preset-row__fields">
+										<NameSlugFields
+											name={ size.name }
+											slug={ size.slug }
+											isLocked={ isLocked }
+											onNameChange={ ( v ) => updateSizeName( i, v ) }
+											onSlugChange={ ( v ) => updateSizeSlug( i, v ) }
+											namePlaceholder={ __( 'Large', 'network-style-override' ) }
+											slugPlaceholder={ __( 'large', 'network-style-override' ) }
+										/>
+										<UnitControl
+											value={ size.size }
+											onChange={ ( v ) => updateSize( i, 'size', v ) }
+											units={ CSS_UNITS }
+											__nextHasNoMarginBottom
+										/>
+									</div>
+								</div>
 							);
 						} ) }
-					</VStack>
+					</div>
 				</PanelBody>
 			</Panel>
 		</>

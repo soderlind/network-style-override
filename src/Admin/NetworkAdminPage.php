@@ -84,14 +84,15 @@ final class NetworkAdminPage {
 		);
 
 		// Only enqueue CSS if it exists.
-		$css_file = NSO_PLUGIN_DIR . 'build/index.css';
+		$css_file = NSO_PLUGIN_DIR . 'build/style-index.css';
 		if ( file_exists( $css_file ) ) {
 			wp_enqueue_style(
 				'nso-admin',
-				NSO_PLUGIN_URL . 'build/index.css',
+				NSO_PLUGIN_URL . 'build/style-index.css',
 				[ 'wp-components' ],
 				$asset['version'],
 			);
+			wp_style_add_data( 'nso-admin', 'rtl', 'replace' );
 		} else {
 			// Just load wp-components styles.
 			wp_enqueue_style( 'wp-components' );

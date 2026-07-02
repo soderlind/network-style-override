@@ -1,18 +1,11 @@
 import { useState } from '@wordpress/element';
 import {
-	TextControl,
 	Panel,
 	PanelBody,
-	Flex,
-	FlexItem,
-	FlexBlock,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
 	__experimentalUnitControl as UnitControl,
-	Card,
-	CardBody,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import NameSlugFields from './NameSlugFields';
 
 /**
  * Convert a name to a valid slug (kebab-case).
@@ -70,73 +63,50 @@ export default function Spacing( { spacingSizes, onChange, lockedSlugs = new Set
 				<p className="description">
 					{ __( 'Override spacing presets for padding, margin, and gap.', 'network-style-override' ) }
 				</p>
-				<div style={ { display: 'flex', padding: '0 56px 8px 56px', fontSize: 11, fontWeight: 500, color: '#757575', textTransform: 'uppercase' } }>
-					<span style={ { flex: 1 } }>{ __( 'Name', 'network-style-override' ) }</span>
-					<span style={ { flex: 1 } }>{ __( 'Identifier', 'network-style-override' ) }</span>
-					<span style={ { flex: 1 } }>{ __( 'Size', 'network-style-override' ) }</span>
-				</div>
+				<div className="nso-preset-list">
+					<div className="nso-preset-list__header">
+						<span>{ __( 'Name', 'network-style-override' ) }</span>
+						<span>{ __( 'Identifier', 'network-style-override' ) }</span>
+						<span>{ __( 'Size', 'network-style-override' ) }</span>
+					</div>
 
-				<VStack spacing={ 3 }>
 					{ spacingSizes.map( ( item, i ) => {
 						const isLocked = lockedSlugs.has( item.slug );
 						return (
-							<Card key={ i } size="small">
-								<CardBody>
-									<Flex align="center" gap={ 3 }>
-										<FlexItem>
-											<div
-												style={ {
-													width: 40,
-													height: 40,
-													background: '#1e1e1e',
-													borderRadius: 4,
-													display: 'flex',
-													alignItems: 'center',
-													justifyContent: 'center',
-												} }
-											>
-												<div
-													style={ {
-														width: Math.min( parseInt( item.size ) || 16, 32 ),
-														height: Math.min( parseInt( item.size ) || 16, 32 ),
-														background: '#fff',
-														borderRadius: 2,
-													} }
-												/>
-											</div>
-										</FlexItem>
-										<FlexBlock>
-											<HStack alignment="stretch" spacing={ 3 }>
-												<TextControl
-													placeholder={ __( 'Medium', 'network-style-override' ) }
-													value={ item.name }
-													onChange={ ( v ) => updateName( i, v ) }
-													__nextHasNoMarginBottom
-													readOnly={ isLocked }
-													disabled={ isLocked }
-												/>
-												<TextControl
-													placeholder={ __( 'medium', 'network-style-override' ) }
-													value={ item.slug }
-													onChange={ ( v ) => updateSlug( i, v ) }
-													__nextHasNoMarginBottom
-													readOnly={ isLocked }
-													disabled={ isLocked }
-												/>
-												<UnitControl
-													value={ item.size }
-													onChange={ ( v ) => update( i, 'size', v ) }
-													units={ CSS_UNITS }
-													__nextHasNoMarginBottom
-												/>
-											</HStack>
-										</FlexBlock>
-									</Flex>
-								</CardBody>
-							</Card>
+							<div key={ i } className="nso-preset-row">
+								<div className="nso-preset-row__preview">
+									<div className="nso-preview-tile">
+										<div
+											style={ {
+												width: Math.min( parseInt( item.size ) || 16, 24 ),
+												height: Math.min( parseInt( item.size ) || 16, 24 ),
+												background: '#fff',
+												borderRadius: 2,
+											} }
+										/>
+									</div>
+								</div>
+								<div className="nso-preset-row__fields">
+									<NameSlugFields
+										name={ item.name }
+										slug={ item.slug }
+										isLocked={ isLocked }
+										onNameChange={ ( v ) => updateName( i, v ) }
+										onSlugChange={ ( v ) => updateSlug( i, v ) }
+										namePlaceholder={ __( 'Medium', 'network-style-override' ) }
+										slugPlaceholder={ __( 'medium', 'network-style-override' ) }
+									/>
+									<UnitControl
+										value={ item.size }
+										onChange={ ( v ) => update( i, 'size', v ) }
+										units={ CSS_UNITS }
+										__nextHasNoMarginBottom
+									/>
+								</div>
+							</div>
 						);
 					} ) }
-				</VStack>
+				</div>
 			</PanelBody>
 		</Panel>
 	);

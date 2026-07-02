@@ -26,8 +26,8 @@ TESTS_PASSED=0
 TESTS_FAILED=0
 TESTS_SKIPPED=0
 
-# Plugin slug (note: typo in directory name)
-PLUGIN_SLUG="multisite-overide-style"
+# Plugin slug
+PLUGIN_SLUG="network-style-override"
 
 # WP-CLI wrapper using wp-cli-local
 wp_cmd() {
@@ -109,10 +109,10 @@ check_prerequisites() {
         try {
             // Test core classes load
             \$classes = [
-                'MultisiteOverrideStyle\\\Storage\\\SettingsRepository',
-                'MultisiteOverrideStyle\\\Override\\\CssOverride',
-                'MultisiteOverrideStyle\\\Override\\\ThemeJsonOverride',
-                'MultisiteOverrideStyle\\\Admin\\\RestController',
+                'NetworkStyleOverride\\\Storage\\\SettingsRepository',
+                'NetworkStyleOverride\\\Override\\\CssOverride',
+                'NetworkStyleOverride\\\Override\\\ThemeJsonOverride',
+                'NetworkStyleOverride\\\Admin\\\RestController',
                 'Soderlind\\\WordPress\\\GitHubUpdater',
             ];
             foreach (\$classes as \$class) {
@@ -153,45 +153,45 @@ test_rest_endpoints() {
     local settings_response
     settings_response=$(wp_cmd eval "
         wp_set_current_user(get_user_by('login', '$admin_user')->ID);
-        \$request = new WP_REST_Request('GET', '/mos/v1/settings');
+        \$request = new WP_REST_Request('GET', '/nso/v1/settings');
         \$response = rest_do_request(\$request);
         echo json_encode(\$response->get_data());
     " 2>/dev/null || echo "error")
 
     if [[ "$settings_response" == *"css"* ]] && [[ "$settings_response" == *"theme_json"* ]]; then
-        pass "GET /mos/v1/settings returns expected fields"
+        pass "GET /nso/v1/settings returns expected fields"
     else
-        fail "GET /mos/v1/settings failed: $settings_response"
+        fail "GET /nso/v1/settings failed: $settings_response"
     fi
 
     # Test network-themes endpoint
     local themes_response
     themes_response=$(wp_cmd eval "
         wp_set_current_user(get_user_by('login', '$admin_user')->ID);
-        \$request = new WP_REST_Request('GET', '/mos/v1/network-themes');
+        \$request = new WP_REST_Request('GET', '/nso/v1/network-themes');
         \$response = rest_do_request(\$request);
         echo json_encode(\$response->get_data());
     " 2>/dev/null || echo "error")
 
     if [[ "$themes_response" == "["* ]] || [[ "$themes_response" == "[]" ]]; then
-        pass "GET /mos/v1/network-themes returns array"
+        pass "GET /nso/v1/network-themes returns array"
     else
-        fail "GET /mos/v1/network-themes failed: $themes_response"
+        fail "GET /nso/v1/network-themes failed: $themes_response"
     fi
 
     # Test theme-overrides endpoint
     local overrides_response
     overrides_response=$(wp_cmd eval "
         wp_set_current_user(get_user_by('login', '$admin_user')->ID);
-        \$request = new WP_REST_Request('GET', '/mos/v1/theme-overrides');
+        \$request = new WP_REST_Request('GET', '/nso/v1/theme-overrides');
         \$response = rest_do_request(\$request);
         echo json_encode(\$response->get_data());
     " 2>/dev/null || echo "error")
 
     if [[ "$overrides_response" == "{"* ]] || [[ "$overrides_response" == "{}" ]] || [[ "$overrides_response" == "[]" ]]; then
-        pass "GET /mos/v1/theme-overrides returns object"
+        pass "GET /nso/v1/theme-overrides returns object"
     else
-        fail "GET /mos/v1/theme-overrides failed: $overrides_response"
+        fail "GET /nso/v1/theme-overrides failed: $overrides_response"
     fi
 }
 
@@ -203,14 +203,14 @@ test_css_override() {
 
     # Save CSS
     wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         \$repo->save_css('$test_css');
     " 2>/dev/null
 
     # Verify CSS was saved
     local saved_css
     saved_css=$(wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         echo \$repo->get_css();
     " 2>/dev/null)
 
@@ -222,7 +222,7 @@ test_css_override() {
 
     # Clean up
     wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         \$repo->save_css('');
     " 2>/dev/null
 }
@@ -233,14 +233,14 @@ test_theme_json_override() {
 
     # Save theme.json
     wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         \$repo->save_theme_json(['settings' => ['color' => ['palette' => []]]]);
     " 2>/dev/null
 
     # Verify theme.json was saved
     local saved_json
     saved_json=$(wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         echo json_encode(\$repo->get_theme_json());
     " 2>/dev/null)
 
@@ -252,7 +252,7 @@ test_theme_json_override() {
 
     # Clean up
     wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         \$repo->save_theme_json([]);
     " 2>/dev/null
 }
@@ -267,14 +267,14 @@ test_theme_overrides() {
 
     # Save theme override
     wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         \$repo->save_theme_override('$test_theme', '$test_css', json_decode('$test_json', true));
     " 2>/dev/null
 
     # Verify CSS for theme
     local theme_css
     theme_css=$(wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         echo \$repo->get_theme_css('$test_theme');
     " 2>/dev/null)
 
@@ -287,7 +287,7 @@ test_theme_overrides() {
     # Verify theme.json for theme
     local theme_json
     theme_json=$(wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         echo json_encode(\$repo->get_theme_json_for_theme('$test_theme'));
     " 2>/dev/null)
 
@@ -299,13 +299,13 @@ test_theme_overrides() {
 
     # Test delete
     wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         \$repo->delete_theme_override('$test_theme');
     " 2>/dev/null
 
     local deleted_css
     deleted_css=$(wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         echo \$repo->get_theme_css('$test_theme');
     " 2>/dev/null)
 
@@ -331,14 +331,14 @@ test_exemptions() {
 
     # Add exemption
     wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         \$repo->add_exemption($blog_id);
     " 2>/dev/null
 
     # Check exemption
     local is_exempted
     is_exempted=$(wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         echo \$repo->is_exempted($blog_id) ? 'true' : 'false';
     " 2>/dev/null)
 
@@ -350,12 +350,12 @@ test_exemptions() {
 
     # Remove exemption
     wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         \$repo->remove_exemption($blog_id);
     " 2>/dev/null
 
     is_exempted=$(wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         echo \$repo->is_exempted($blog_id) ? 'true' : 'false';
     " 2>/dev/null)
 
@@ -380,7 +380,7 @@ test_export_import() {
 
     # Set some test data
     wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         \$repo->save_css('/* Export test */');
         \$repo->save_theme_json(['version' => 3]);
         \$repo->save_theme_override('test-theme', '/* Theme export */', ['version' => 3]);
@@ -390,7 +390,7 @@ test_export_import() {
     local export_data
     export_data=$(wp_cmd eval "
         wp_set_current_user(get_user_by('login', '$admin_user')->ID);
-        \$request = new WP_REST_Request('GET', '/mos/v1/export');
+        \$request = new WP_REST_Request('GET', '/nso/v1/export');
         \$response = rest_do_request(\$request);
         echo json_encode(\$response->get_data());
     " 2>/dev/null)
@@ -403,7 +403,7 @@ test_export_import() {
 
     # Clean up
     wp_cmd eval "
-        \$repo = new MultisiteOverrideStyle\Storage\SettingsRepository();
+        \$repo = new NetworkStyleOverride\Storage\SettingsRepository();
         \$repo->save_css('');
         \$repo->save_theme_json([]);
         \$repo->delete_theme_override('test-theme');
@@ -414,17 +414,17 @@ test_export_import() {
 test_hooks() {
     section "WordPress Hooks"
 
-    # Check CSS enqueue hook
+    # Check CSS output hook
     local css_hook
     css_hook=$(wp_cmd eval "
         global \$wp_filter;
-        echo isset(\$wp_filter['wp_enqueue_scripts']) ? 'registered' : 'missing';
+        echo isset(\$wp_filter['wp_head']) ? 'registered' : 'missing';
     " 2>/dev/null)
 
     if [[ "$css_hook" == "registered" ]]; then
-        pass "wp_enqueue_scripts hook registered"
+        pass "wp_head hook registered"
     else
-        fail "wp_enqueue_scripts hook not found"
+        fail "wp_head hook not found"
     fi
 
     # Check theme.json filter
@@ -457,7 +457,7 @@ print_summary() {
 
 # Main
 main() {
-    echo "Multisite Override Style - Acceptance Tests"
+    echo "Network Style Override - Acceptance Tests"
     echo "Using: wp-cli-local wrapper"
     echo ""
 
