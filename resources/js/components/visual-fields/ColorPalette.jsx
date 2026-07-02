@@ -1,19 +1,13 @@
 import { useState } from '@wordpress/element';
 import {
-	TextControl,
 	ColorPicker,
+	ColorIndicator,
 	Dropdown,
-	Flex,
-	FlexItem,
-	FlexBlock,
 	Panel,
 	PanelBody,
-	Card,
-	CardBody,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import NameSlugFields from './NameSlugFields';
 
 /**
  * Convert a name to a valid slug (kebab-case).
@@ -44,64 +38,46 @@ function ColorRow( { color, onChange, isLocked } ) {
 	};
 
 	return (
-		<Card size="small">
-			<CardBody>
-				<Flex align="center" gap={ 3 }>
-					<FlexItem>
-						<Dropdown
-							renderToggle={ ( { isOpen, onToggle } ) => (
-								<button
-									type="button"
-									aria-expanded={ isOpen }
-									onClick={ onToggle }
-									style={ {
-										width: 40,
-										height: 40,
-										borderRadius: 4,
-										border: '1px solid #ddd',
-										cursor: 'pointer',
-										padding: 0,
-										background: color.color || '#000',
-									} }
-								/>
-							) }
-							renderContent={ () => (
-								<div style={ { padding: 16 } }>
-									<ColorPicker
-										color={ color.color }
-										onChange={ ( newColor ) =>
-											onChange( { ...color, color: newColor } )
-										}
-										enableAlpha={ true }
-									/>
-								</div>
-							) }
-						/>
-					</FlexItem>
+		<div className="nso-preset-row">
+			<div className="nso-preset-row__preview">
+				<Dropdown
+					renderToggle={ ( { isOpen, onToggle } ) => (
+						<button
+							type="button"
+							className="nso-swatch-toggle"
+							aria-label={ __( 'Edit color', 'network-style-override' ) }
+							aria-expanded={ isOpen }
+							onClick={ onToggle }
+						>
+							<ColorIndicator colorValue={ color.color || '#000' } />
+						</button>
+					) }
+					renderContent={ () => (
+						<div style={ { padding: 16 } }>
+							<ColorPicker
+								color={ color.color }
+								onChange={ ( newColor ) =>
+									onChange( { ...color, color: newColor } )
+								}
+								enableAlpha={ true }
+							/>
+						</div>
+					) }
+				/>
+			</div>
 
-					<FlexBlock>
-						<HStack alignment="stretch" spacing={ 3 }>
-							<TextControl
-								placeholder={ __( 'Primary', 'network-style-override' ) }
-								value={ color.name }
-								onChange={ handleNameChange }
-								__nextHasNoMarginBottom
-								readOnly={ isLocked }
-								disabled={ isLocked }
-							/>
-							<TextControl
-								placeholder={ __( 'primary', 'network-style-override' ) }
-								value={ color.slug }
-								onChange={ handleSlugChange }
-								__nextHasNoMarginBottom
-								readOnly={ isLocked }
-								disabled={ isLocked }
-							/>
-						</HStack>
-					</FlexBlock>
-				</Flex>
-			</CardBody>
-		</Card>
+			<div className="nso-preset-row__fields">
+				<NameSlugFields
+					name={ color.name }
+					slug={ color.slug }
+					isLocked={ isLocked }
+					onNameChange={ handleNameChange }
+					onSlugChange={ handleSlugChange }
+					namePlaceholder={ __( 'Primary', 'network-style-override' ) }
+					slugPlaceholder={ __( 'primary', 'network-style-override' ) }
+				/>
+			</div>
+		</div>
 	);
 }
 
@@ -121,12 +97,13 @@ export default function ColorPaletteField( { colors, onChange, lockedSlugs = new
 				<p className="description">
 					{ __( 'Override colors available in the block editor.', 'network-style-override' ) }
 				</p>
-				<div style={ { display: 'flex', padding: '0 56px 8px 56px', fontSize: 11, fontWeight: 500, color: '#757575', textTransform: 'uppercase' } }>
-					<span style={ { flex: 1 } }>{ __( 'Name', 'network-style-override' ) }</span>
-					<span style={ { flex: 1 } }>{ __( 'Identifier', 'network-style-override' ) }</span>
-				</div>
 
-				<VStack spacing={ 3 }>
+				<div className="nso-preset-list">
+					<div className="nso-preset-list__header">
+						<span>{ __( 'Name', 'network-style-override' ) }</span>
+						<span>{ __( 'Identifier', 'network-style-override' ) }</span>
+					</div>
+
 					{ colors.map( ( color, index ) => (
 						<ColorRow
 							key={ index }
@@ -135,7 +112,7 @@ export default function ColorPaletteField( { colors, onChange, lockedSlugs = new
 							isLocked={ lockedSlugs.has( color.slug ) }
 						/>
 					) ) }
-				</VStack>
+				</div>
 			</PanelBody>
 		</Panel>
 	);

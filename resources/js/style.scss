@@ -1,0 +1,185 @@
+/**
+ * Network Style Override – admin styles.
+ *
+ * Aims to match the WordPress Site Editor / Global Styles look:
+ * hairline-separated list rows inside a single bordered container.
+ */
+
+.mos-visual-tab {
+	.components-panel__body {
+		// Let the list container own the edges instead of the panel.
+		padding-left: 16px;
+		padding-right: 16px;
+	}
+
+	.components-panel__body > .description {
+		margin: 0 0 12px;
+	}
+}
+
+.nso-preset-list {
+	border: 1px solid #e0e0e0;
+	border-radius: 2px;
+	background: #fff;
+}
+
+.nso-preset-list__header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 8px 12px;
+	border-bottom: 1px solid #e0e0e0;
+	background: #f6f7f7;
+
+	// Spacer that lines the columns up with each row's leading swatch/preview.
+	&::before {
+		content: '';
+		flex: 0 0 32px;
+	}
+
+	&.is-no-preview::before {
+		display: none;
+	}
+
+	span {
+		flex: 1;
+		font-size: 11px;
+		font-weight: 500;
+		line-height: 1.4;
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
+		color: #757575;
+	}
+}
+
+.nso-preset-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px;
+
+	& + .nso-preset-row {
+		border-top: 1px solid #f0f0f1;
+	}
+
+	&:hover {
+		background: #f6f7f7;
+	}
+}
+
+.nso-preset-row__preview {
+	flex: 0 0 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.nso-preset-row__fields {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+
+	> * {
+		flex: 1;
+		min-width: 0;
+	}
+}
+
+// Vertical variant (font families: name/slug row + full-width CSS stack).
+.nso-preset-row__stack {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.nso-preset-row__cols {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+
+	> * {
+		flex: 1;
+		min-width: 0;
+	}
+}
+
+// Static (read-only) name / identifier for locked theme presets.
+.nso-preset-text {
+	display: flex;
+	align-items: center;
+	min-height: 30px;
+	font-size: 13px;
+	line-height: 1.4;
+	color: #1e1e1e;
+}
+
+.nso-preset-text.is-slug {
+	font-family: Menlo, Consolas, monaco, monospace;
+	font-size: 12px;
+	color: #757575;
+}
+
+// Circular color swatch toggle (matches core ColorIndicator affordance).
+.nso-swatch-toggle {
+	display: inline-flex;
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: pointer;
+	border-radius: 50%;
+
+	&:focus-visible {
+		outline: 2px solid var( --wp-admin-theme-color, #3858e9 );
+		outline-offset: 2px;
+	}
+
+	.component-color-indicator {
+		width: 28px;
+		height: 28px;
+		margin: 0;
+	}
+}
+
+// Square preview tile used by font-size and spacing rows.
+.nso-preview-tile {
+	width: 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #1e1e1e;
+	color: #fff;
+	border-radius: 2px;
+	font-weight: 600;
+}
+
+.nso-border-preview {
+	width: 60px;
+	height: 60px;
+	background: #f6f7f7;
+}
+
+// Border Defaults layout: fixed preview + equal-width control grid.
+.nso-border {
+	display: flex;
+	align-items: flex-start;
+	gap: 24px;
+}
+
+.nso-border__controls {
+	flex: 1;
+	min-width: 0;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+}
+
+// Align the swatch button to the bottom of its labeled control.
+.nso-border__color .nso-swatch-toggle {
+	height: 30px;
+	align-items: center;
+}
