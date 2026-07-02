@@ -2,8 +2,8 @@
 
 Network-wide CSS and `theme.json` overrides for WordPress Multisite. Enforce brand consistency across all subsites from a single admin panel.
 
-<img width="100%"  alt="Screenshot 2026-06-30 at 20 01 25" src="https://github.com/user-attachments/assets/ca69a5f8-222c-4a45-9b20-6504086e797d" />
-
+<img width="1200" height="601" alt="Screenshot 2026-07-02 at 18 44 07" src="https://github.com/user-attachments/assets/dac3ec9e-7926-48e7-a9b9-31d30552bed5" />
+<p align="center"><i>Network override theme.json</i></p>
 
 ## Features
 
