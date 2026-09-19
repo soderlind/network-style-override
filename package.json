@@ -23,7 +23,7 @@
 		"@wordpress/notices": "*"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^32.5.0"
+		"@wordpress/scripts": "^35.0.0"
 	},
 	"overrides": {
 		"@babel/core": "^7.29.6",
